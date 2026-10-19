@@ -1224,3 +1224,30 @@ body {
   font-size: 14px;
   color: var(--tekst-2);
 }
+
+.zapusk-punkt {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.zapusk-punkt input {
+  margin-top: 3px;
+  accent-color: var(--aktsent);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.zapusk-pitch h4 {
+  margin: 12px 0 4px;
+  font-size: 15px;
+}
+
+.zapusk-pitch p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--tekst-2);
+}
