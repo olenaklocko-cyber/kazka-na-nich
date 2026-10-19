@@ -307,7 +307,32 @@ function liqPayUspikh(dataB64: string, signature: string): boolean {
  *  2) { data, signature }  — справжній result_url від LiqPay (підпис перевіряється).
  * У разі успіху видає cookie Pro на 30 днів.
  */
-export function obrobytyPayConfirm(obrobka: Obrobka): RobochaVidpovid {
+/** Запитує у LiqPay статус платежу за order_id (server-to-server API). */
+async function liqPayStatusPerevirka(orderId: string): Promise<boolean> {
+  if (yeDemoRezhym()) return false;
+  const payload = {
+    version: 7,
+    public_key: process.env.LIQPAY_PUBLIC_KEY ?? "",
+    action: "status",
+    order_id: orderId,
+  };
+  const data = Buffer.from(JSON.stringify(payload)).toString("base64");
+  const signature = liqPayPidpys(data);
+  try {
+    const vidpovid = await fetch("https://www.liqpay.ua/api/request", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ data, signature }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    const json = (await vidpovid.json()) as { result?: string; status?: string };
+    return json.result === "ok" && (json.status === "success" || json.status === "sandbox");
+  } catch {
+    return false;
+  }
+}
+
+export async function obrobytyPayConfirm(obrobka: Obrobka): Promise<RobochaVidpovid> {
   const body =
     typeof obrobka.body === "object" && obrobka.body !== null
       ? (obrobka.body as Record<string, unknown>)
@@ -320,6 +345,8 @@ export function obrobytyPayConfirm(obrobka: Obrobka): RobochaVidpovid {
     uspikh = payload !== null && payload.metu === "demo-oplata" && Number(payload.exp) > Date.now();
   } else if (typeof body.data === "string" && typeof body.signature === "string") {
     uspikh = liqPayUspikh(body.data, body.signature);
+  } else if (typeof body.orderId === "string" && /^kazka-\d{10,}-[0-9a-f]{4,8}$/i.test(body.orderId)) {
+    uspikh = await liqPayStatusPerevirka(body.orderId);
   }
 
   if (!uspikh) {

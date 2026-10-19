@@ -6,7 +6,10 @@ import type { ApiReq, ApiRes } from "../../shared/api-helpers.js";
 import { nePost, viddaty } from "../../shared/api-helpers.js";
 import { obrobytyPayConfirm } from "../../shared/pro.js";
 
-export default function handler(req: ApiReq, res: ApiRes): void {
+export default async function handler(req: ApiReq, res: ApiRes): Promise<void> {
   if (nePost(req, res)) return;
-  viddaty(res, obrobytyPayConfirm({ method: "POST", headers: req.headers ?? {}, body: req.body ?? {} }));
+  viddaty(
+    res,
+    await obrobytyPayConfirm({ method: "POST", headers: req.headers ?? {}, body: req.body ?? {} }),
+  );
 }

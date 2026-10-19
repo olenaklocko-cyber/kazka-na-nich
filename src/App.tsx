@@ -148,6 +148,7 @@ export default function App() {
         });
         const vidpovid = (await res.json()) as { pro?: boolean };
         if (res.ok && vidpovid.pro) {
+          localStorage.removeItem("kazka_platizh");
           setOplata("uspikh");
           await zavantazhytyStan();
         }
@@ -156,6 +157,37 @@ export default function App() {
       }
     })();
   }, []);
+
+  /** План Б: якщо LiqPay повернув без підпису — питаємо статус за збереженим order_id. */
+  useEffect(() => {
+    if (stan?.pro) return;
+    let platizh: { id?: string; t?: number } | null = null;
+    try {
+      platizh = JSON.parse(localStorage.getItem("kazka_platizh") ?? "null");
+    } catch {
+      platizh = null;
+    }
+    if (!platizh?.id || typeof platizh.t !== "number" || Date.now() - platizh.t > 30 * 60_000) {
+      if (platizh) localStorage.removeItem("kazka_platizh");
+      return;
+    }
+    void (async () => {
+      try {
+        const res = await fetch("/api/pay/confirm", {
+          ...ZAPYT,
+          body: JSON.stringify({ orderId: platizh.id }),
+        });
+        const vidpovid = (await res.json()) as { pro?: boolean };
+        if (res.ok && vidpovid.pro) {
+          localStorage.removeItem("kazka_platizh");
+          setOplata("uspikh");
+          await zavantazhytyStan();
+        }
+      } catch {
+        /* офлайн — спробуємо при наступному відвідуванні */
+      }
+    })();
+  }, [stan?.pro]);
 
   const generuvaly = async (podium: "perehlyad" | "scheOdna" = "perehlyad") => {
     if (zavantazhennya || limyt) return;
@@ -246,6 +278,14 @@ export default function App() {
         setDemoToken(data.token);
         setOplata("demo");
       } else if (data.forma) {
+        try {
+          const pl = JSON.parse(atob(data.forma.data)) as { order_id?: string };
+          if (typeof pl.order_id === "string") {
+            localStorage.setItem("kazka_platizh", JSON.stringify({ id: pl.order_id, t: Date.now() }));
+          }
+        } catch {
+          /* без order_id — відновлення просто не спрацює */
+        }
         setLiqpayForma(data.forma);
         setOplata("liqpay");
       }
