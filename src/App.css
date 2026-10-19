@@ -1119,3 +1119,37 @@ body {
 .os-kroky strong {
   color: var(--tekst);
 }
+
+.infra-komanda {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: clamp(15px, 3vw, 19px);
+  font-weight: 700;
+  background: var(--poverkhnya-2);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: var(--radius-malyj);
+  padding: 12px 14px;
+  margin: 8px 0;
+  overflow-x: auto;
+  color: var(--aktsent);
+}
+
+.infra-spysok {
+  gap: 10px;
+}
+
+.infra-seredovyshche {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--poverkhnya-2);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: var(--radius-malyj);
+  font-size: 13px;
+  color: var(--tekst-2);
+}
+
+.infra-nazva {
+  font-size: 15px;
+  color: var(--tekst);
+}

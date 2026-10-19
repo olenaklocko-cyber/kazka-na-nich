@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Analytyka from "./Analytyka";
 import OpenSource from "./OpenSource";
+import Infrastruktura from "./Infrastruktura";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -109,12 +110,14 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
-  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os">(() =>
+  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra">(() =>
     window.location.hash.startsWith("#analytyka")
       ? "analytyka"
       : window.location.hash.startsWith("#os")
         ? "os"
-        : "kazky",
+        : window.location.hash.startsWith("#infra")
+          ? "infra"
+          : "kazky",
   );
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
@@ -153,6 +156,7 @@ export default function App() {
     const naHash = () => {
       if (window.location.hash.startsWith("#analytyka")) setRozdil("analytyka");
       else if (window.location.hash.startsWith("#os")) setRozdil("os");
+      else if (window.location.hash.startsWith("#infra")) setRozdil("infra");
       else setRozdil("kazky");
     };
     window.addEventListener("hashchange", naHash);
@@ -544,6 +548,17 @@ export default function App() {
             >
               🌍 Open Source
             </button>
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={rozdil === "infra"}
+              onClick={() => {
+                setRozdil("infra");
+                window.location.hash = "infra";
+              }}
+            >
+              ⚙️ Інфраструктура
+            </button>
           </nav>
           {pro ? (
             <span className="pro-beydzh" role="status">
@@ -584,6 +599,8 @@ export default function App() {
         <Analytyka onNyazh={() => setRozdil("kazky")} />
       ) : rozdil === "os" ? (
         <OpenSource />
+      ) : rozdil === "infra" ? (
+        <Infrastruktura />
       ) : (
       <main className="holovne">
         <form

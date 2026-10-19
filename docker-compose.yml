@@ -1,0 +1,12 @@
+# Один виклик — і продукт піднімається з нуля:
+#   docker compose up --build
+# Потім: http://localhost:3002
+services:
+  kazka:
+    build: .
+    ports:
+      - "3002:3002"
+    env_file:
+      - path: .env
+        required: false
+    restart: unless-stopped

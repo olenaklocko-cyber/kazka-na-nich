@@ -10,14 +10,15 @@
  */
 import { createServer } from "node:http";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { existsSync, readFileSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Obrobka, RobochaVidpovid } from "../shared/pro.js";
 import { obrobytyCheckout, obrobytyKazka, obrobytyPayConfirm, obrobytyStatus } from "../shared/pro.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = Number(process.env.SERVER_PORT ?? 3002);
+const PORT = Number(process.env.PORT ?? process.env.SERVER_PORT ?? 3002);
+const DIST = path.join(__dirname, "..", "dist");
 
 /** Мінімальний читач .env (без зайвих залежностей). */
 function zavantazhytyEnv(): void {
@@ -65,6 +66,51 @@ function viddaty(res: ServerResponse, vidpovid: RobochaVidpovid): void {
   res.end(JSON.stringify(vidpovid.body));
 }
 
+const MIME: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".ico": "image/x-icon",
+  ".woff2": "font/woff2",
+  ".txt": "text/plain; charset=utf-8",
+};
+
+/** Віддає зібрані файли з dist/ (Docker/прод). true — якщо запит оброблено. */
+function sprobovatyStatyku(req: IncomingMessage, res: ServerResponse): boolean {
+  if (req.method !== "GET" && req.method !== "HEAD") return false;
+  const shlyakh = decodeURIComponent((req.url ?? "/").split("?")[0]);
+  if (shlyakh.startsWith("/api/")) return false;
+
+  const bezpechnyj = path.normalize(shlyakh).replace(/^(\.\.[/\\])+/, "");
+  let fayl = path.join(DIST, bezpechnyj);
+  if (!fayl.startsWith(DIST)) return false;
+  if (existsSync(fayl) && statSync(fayl).isDirectory()) fayl = path.join(fayl, "index.html");
+  if (!existsSync(fayl)) {
+    // SPA-фолбек: будь-який інший GET → index.html (робота вкладок/хешів)
+    fayl = path.join(DIST, "index.html");
+    if (!existsSync(fayl)) return false;
+  }
+
+  const rozshyrennya = path.extname(fayl).toLowerCase();
+  const typ = MIME[rozshyrennya] ?? "application/octet-stream";
+  const stat = statSync(fayl);
+  res.writeHead(200, {
+    "Content-Type": typ,
+    "Content-Length": stat.size,
+    "Cache-Control": rozshyrennya === ".html" ? "no-cache" : "public, max-age=31536000, immutable",
+  });
+  if (req.method === "HEAD") {
+    res.end();
+    return true;
+  }
+  createReadStream(fayl).pipe(res);
+  return true;
+}
+
 const MARshruty: Record<string, (obrobka: Obrobka) => RobochaVidpovid | Promise<RobochaVidpovid>> = {
   "/api/status": obrobytyStatus,
   "/api/checkout": () => obrobytyCheckout(),
@@ -97,6 +143,7 @@ const server = createServer((req, res) => {
   }
 
   const url = (req.url ?? "/").split("?")[0];
+  if (sprobovatyStatyku(req, res)) return;
   const obrobyty = req.method === "POST" ? MARshruty[url] : undefined;
 
   if (!obrobyty) {

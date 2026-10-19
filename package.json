@@ -9,11 +9,14 @@
     "server": "tsx server/server.ts",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "tsx server/server.ts",
+    "start:prod": "NODE_ENV=production tsx server/server.ts"
   },
   "dependencies": {
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "tsx": "^4.23.15"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
@@ -22,7 +25,6 @@
     "@vitejs/plugin-react": "^6.1.1",
     "concurrently": "^10.0.6",
     "oxlint": "^1.81.0",
-    "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "vite": "^8.3.0"
   }
