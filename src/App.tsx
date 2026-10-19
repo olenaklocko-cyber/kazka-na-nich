@@ -484,17 +484,6 @@ export default function App() {
   const dataPro =
     stan?.proDo != null ? new Date(stan.proDo).toLocaleDateString("uk-UA") : "";
 
-  if (zvit) {
-    return (
-      <Analytyka
-        onNyazh={() => {
-          window.location.hash = "";
-          setZvit(false);
-        }}
-      />
-    );
-  }
-
   return (
     <div className="kazka-dodatok">
       <header className="shapka">
@@ -510,6 +499,30 @@ export default function App() {
           </div>
         </div>
         <div className="shapka-prava">
+          <nav className="shapka-navyhay" aria-label="Розділи застосунку">
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={!zvit}
+              onClick={() => {
+                setZvit(false);
+                window.location.hash = "";
+              }}
+            >
+              📖 Казки
+            </button>
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={zvit}
+              onClick={() => {
+                setZvit(true);
+                window.location.hash = "analytyka";
+              }}
+            >
+              📈 Аналітика
+            </button>
+          </nav>
           {pro ? (
             <span className="pro-beydzh" role="status">
               ✨ Pro{dataPro ? ` до ${dataPro}` : ""}
@@ -545,6 +558,9 @@ export default function App() {
         </div>
       </header>
 
+      {zvit ? (
+        <Analytyka onNyazh={() => setZvit(false)} />
+      ) : (
       <main className="holovne">
         <form
           className="generator sklo"
@@ -848,6 +864,7 @@ export default function App() {
           )}
         </section>
       </main>
+      )}
 
       {/* ==================== ДІАЛОГ ОПЛАТИ ==================== */}
       {oplata && (
@@ -1003,11 +1020,6 @@ export default function App() {
           🌙 Казка на ніч — навчальний продукт рівня 7. Оплату обробляє LiqPay:
           наш сервер бачить лише «оплачено», ніколи — дані картки. Зроблено з 💙
           для батьків, які втомилися вигадувати щовечора.
-        </p>
-        <p className="pidval-analytyka">
-          <a href="#analytyka" onClick={() => setZvit(true)}>
-            📈 Аналітика (для куратора)
-          </a>
         </p>
       </footer>
     </div>

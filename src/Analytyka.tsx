@@ -84,9 +84,6 @@ export default function Analytyka({ onNyazh }: { onNyazh: () => void }) {
           >
             🧪 Демо-події
           </button>
-          <button type="button" className="knopka knopka-mala" onClick={onNyazh}>
-            ← Назад до казок
-          </button>
         </div>
       </header>
 

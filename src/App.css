@@ -1055,3 +1055,27 @@ body {
   gap: 8px;
   flex-wrap: wrap;
 }
+
+/* вкладки розділів у шапці */
+.shapka-navyhay {
+  display: flex;
+  gap: 6px;
+}
+
+.knopka-vkladka {
+  background: var(--poverkhnya-2);
+  color: var(--tekst-2);
+  border: 1px solid var(--ramka-myaka);
+}
+
+.knopka-vkladka:hover:not(:disabled) {
+  color: var(--tekst);
+  box-shadow: 0 0 14px var(--tisnina);
+  filter: none;
+}
+
+.knopka-vkladka[aria-pressed="true"] {
+  color: var(--tekst);
+  border-color: var(--aktsent);
+  background: rgba(56, 189, 248, 0.14);
+}
