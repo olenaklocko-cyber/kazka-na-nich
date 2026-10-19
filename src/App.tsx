@@ -42,6 +42,36 @@ const UROKY = [
   "Сміливо знайомитися",
 ];
 
+const HEROY_KVADRATYKY: { emoji: string; nazva: string }[] = [
+  { emoji: "🐱", nazva: "Котик" },
+  { emoji: "🐶", nazva: "Песик" },
+  { emoji: "🦊", nazva: "Лисичка" },
+  { emoji: "🐰", nazva: "Зайчик" },
+  { emoji: "🐻", nazva: "Ведмедик" },
+  { emoji: "🦉", nazva: "Сова" },
+  { emoji: "🦄", nazva: "Єдиноріг" },
+  { emoji: "🐉", nazva: "Дракончик" },
+  { emoji: "🤖", nazva: "Робот" },
+  { emoji: "🧚", nazva: "Фея" },
+  { emoji: "🚀", nazva: "Космонавт" },
+  { emoji: "🦖", nazva: "Динозаврик" },
+];
+
+type PoleHolosu = "imia" | "hero" | "urok";
+
+/** Мінімальний тип для Web Speech API (SpeechRecognition). */
+interface RozPiznavanniaHolosu {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  start(): void;
+  stop(): void;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: ((podiia: { error?: string }) => void) | null;
+  onresult: ((podiia: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+}
+
 type ProfilHolosu = "mama" | "tato" | "charyvnyj";
 
 /** Характери озвучки: ті самі системні голоси, але з різним тембром і темпом. */
@@ -72,6 +102,10 @@ export default function App() {
   const [holosy, setHolosy] = useState<SpeechSynthesisVoice[]>([]);
   const rezultatRef = useRef<HTMLHeadingElement>(null);
 
+  const [slukhae, setSlukhae] = useState<PoleHolosu | null>(null);
+  const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
+  const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
+
   const [oplata, setOplata] = useState<StanOplaty>(null);
   const [oplataPomylka, setOplataPomylka] = useState<string | null>(null);
   const [demoToken, setDemoToken] = useState<string | null>(null);
@@ -89,7 +123,10 @@ export default function App() {
 
   useEffect(() => {
     const speech = window.speechSynthesis;
-    return () => speech.cancel();
+    return () => {
+      rozPiznavanniaRef.current?.stop();
+      speech.cancel();
+    };
   }, []);
 
   useEffect(() => {
@@ -188,6 +225,51 @@ export default function App() {
       }
     })();
   }, [stan?.pro]);
+
+  /** Голосове введення: розпізнає сказане і додає у вибране поле форми. */
+  const slukhaty = (pole: PoleHolosu, pryjnyaty: (tekst: string) => void) => {
+    setHolosPomylka(null);
+    if (slukhae === pole) {
+      rozPiznavanniaRef.current?.stop();
+      return;
+    }
+    rozPiznavanniaRef.current?.stop();
+    const w = window as unknown as {
+      SpeechRecognition?: new () => RozPiznavanniaHolosu;
+      webkitSpeechRecognition?: new () => RozPiznavanniaHolosu;
+    };
+    const Klas = w.SpeechRecognition ?? w.webkitSpeechRecognition;
+    if (!Klas) {
+      setHolosPomylka("Цей браузер не підтримує голосове введення — спробуй Chrome або Edge");
+      return;
+    }
+    const roz = new Klas();
+    roz.lang = mova === "en" ? "en-US" : "uk-UA";
+    roz.interimResults = false;
+    roz.continuous = false;
+    roz.onstart = () => {
+      setSlukhae(pole);
+      setHolosPomylka(null);
+    };
+    roz.onend = () => setSlukhae(null);
+    roz.onerror = (podiia) => {
+      setSlukhae(null);
+      setHolosPomylka(
+        podiia.error === "not-allowed"
+          ? "Браузер не дав доступ до мікрофона — дозволь у налаштуваннях сайту"
+          : podiia.error === "no-speech"
+            ? "Нічого не почулося — спробуй ще раз і говори чіткіше"
+            : "Не вдалося розпізнати голос — спробуй ще раз",
+      );
+    };
+    roz.onresult = (podiia) => {
+      const ostannie = podiia.results[podiia.results.length - 1];
+      const tekst = ostannie[0]?.transcript?.trim();
+      if (tekst) pryjnyaty(tekst);
+    };
+    rozPiznavanniaRef.current = roz;
+    roz.start();
+  };
 
   const generuvaly = async (podium: "perehlyad" | "scheOdna" = "perehlyad") => {
     if (zavantazhennya || limyt) return;
@@ -392,57 +474,125 @@ export default function App() {
 
           <div className="pole">
             <label htmlFor="imia">Ім'я дитини</label>
-            <input
-              id="imia"
-              type="text"
-              value={imia}
-              maxLength={40}
-              placeholder="Наприклад: Мілана"
-              autoComplete="off"
-              disabled={limyt}
-              onChange={(e) => setImia(e.target.value)}
-            />
+            <div className="pole-riadok">
+              <input
+                id="imia"
+                type="text"
+                value={imia}
+                maxLength={40}
+                placeholder="Наприклад: Мілана"
+                autoComplete="off"
+                disabled={limyt}
+                onChange={(e) => setImia(e.target.value)}
+              />
+              <button
+                type="button"
+                className="mikrofon"
+                disabled={limyt}
+                aria-label={
+                  slukhae === "imia"
+                    ? "Зупинити запис: ім'я дитини"
+                    : "Сказати ім'я дитини голосом"
+                }
+                aria-pressed={slukhae === "imia"}
+                onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
+              >
+                {slukhae === "imia" ? "⏹" : "🎤"}
+              </button>
+            </div>
           </div>
 
           <div className="pole">
             <label htmlFor="hero">Головний герой</label>
-            <input
-              id="hero"
-              type="text"
-              value={hero}
-              list="spysok-heroi"
-              maxLength={60}
-              placeholder="Котик-космонавт"
-              autoComplete="off"
-              disabled={limyt}
-              onChange={(e) => setHero(e.target.value)}
-            />
+            <div className="pole-riadok">
+              <input
+                id="hero"
+                type="text"
+                value={hero}
+                list="spysok-heroi"
+                maxLength={60}
+                placeholder="Котик-космонавт"
+                autoComplete="off"
+                disabled={limyt}
+                onChange={(e) => setHero(e.target.value)}
+              />
+              <button
+                type="button"
+                className="mikrofon"
+                disabled={limyt}
+                aria-label={
+                  slukhae === "hero" ? "Зупинити запис: головний герой" : "Сказати героя голосом"
+                }
+                aria-pressed={slukhae === "hero"}
+                onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
+              >
+                {slukhae === "hero" ? "⏹" : "🎤"}
+              </button>
+            </div>
             <datalist id="spysok-heroi">
               {HEROI.map((h) => (
                 <option key={h} value={h} />
               ))}
             </datalist>
+            <div className="geroy-kvadratyky" role="group" aria-label="Швидкий вибір героя">
+              {HEROY_KVADRATYKY.map((h) => {
+                const aktivnyj = hero.trim() === h.nazva;
+                return (
+                  <button
+                    key={h.nazva}
+                    type="button"
+                    className="kvadratyk"
+                    disabled={limyt}
+                    aria-pressed={aktivnyj}
+                    onClick={() => setHero(aktivnyj ? "" : h.nazva)}
+                  >
+                    <span aria-hidden="true">{h.emoji}</span>
+                    <span className="kvadratyk-nazva">{h.nazva}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="pole">
             <label htmlFor="urok">Повчальний урок</label>
-            <input
-              id="urok"
-              type="text"
-              value={urok}
-              list="spysok-urokiv"
-              maxLength={80}
-              placeholder="Наприклад: чому чистити зуби"
-              autoComplete="off"
-              disabled={limyt}
-              onChange={(e) => setUrok(e.target.value)}
-            />
+            <div className="pole-riadok">
+              <input
+                id="urok"
+                type="text"
+                value={urok}
+                list="spysok-urokiv"
+                maxLength={80}
+                placeholder="Наприклад: чому чистити зуби"
+                autoComplete="off"
+                disabled={limyt}
+                onChange={(e) => setUrok(e.target.value)}
+              />
+              <button
+                type="button"
+                className="mikrofon"
+                disabled={limyt}
+                aria-label={
+                  slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
+                }
+                aria-pressed={slukhae === "urok"}
+                onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
+              >
+                {slukhae === "urok" ? "⏹" : "🎤"}
+              </button>
+            </div>
             <datalist id="spysok-urokiv">
               {UROKY.map((u) => (
                 <option key={u} value={u} />
               ))}
             </datalist>
           </div>
+
+          <p className="holos-pidkazka" role="status">
+            {slukhae
+              ? "Слухаю… говори, потім натисни ⏹"
+              : (holosPomylka ?? "Не вмієш друкувати? Натисни 🎤 біля поля і скажи голосом")}
+          </p>
 
           <fieldset className="mova-vybir">
             <legend>Мова казки</legend>

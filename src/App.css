@@ -265,6 +265,136 @@ body {
   outline: none; /* альтернативний фокус-кільце замість жовтого контуру */
 }
 
+/* рядок: поле + мікрофон */
+.pole-riadok {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.pole-riadok input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* кнопка мікрофона */
+.mikrofon {
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  min-width: var(--ryadok-knopky);
+  min-height: var(--ryadok-knopky);
+  border-radius: var(--radius-malyj);
+  border: 1px solid var(--ramka-myaka);
+  background: var(--poverkhnya-2);
+  color: var(--tekst);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.mikrofon:hover:not(:disabled) {
+  border-color: var(--aktsent);
+}
+
+.mikrofon:focus-visible {
+  outline: none;
+  border-color: var(--aktsent);
+  box-shadow: 0 0 0 3px var(--tisnina);
+}
+
+.mikrofon[aria-pressed="true"] {
+  background: var(--aktsent-glybokyj);
+  border-color: var(--aktsent);
+  animation: mikrofon-puls 1.2s ease-in-out infinite;
+}
+
+.mikrofon:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@keyframes mikrofon-puls {
+  50% {
+    box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.22);
+  }
+}
+
+/* квадратики швидкого вибору героя */
+.geroy-kvadratyky {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.kvadratyk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--poverkhnya-2);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: var(--radius-malyj);
+  color: var(--tekst-2);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kvadratyk > span:first-child {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.kvadratyk:hover:not(:disabled) {
+  border-color: var(--aktsent);
+  color: var(--tekst);
+}
+
+.kvadratyk:focus-visible {
+  outline: none;
+  border-color: var(--aktsent);
+  box-shadow: 0 0 0 3px var(--tisnina);
+}
+
+.kvadratyk[aria-pressed="true"] {
+  border-color: var(--aktsent);
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--tekst);
+}
+
+.kvadratyk:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* підказка про голосове введення (aria-live) */
+.holos-pidkazka {
+  font-size: 13px;
+  color: var(--tekst-3);
+  margin: 0 0 14px;
+  min-height: 1.2em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mikrofon[aria-pressed="true"] {
+    animation: none;
+  }
+
+  .mikrofon,
+  .kvadratyk {
+    transition: none;
+  }
+}
+
 /* мова — радіо */
 .mova-vybir {
   border: none;
