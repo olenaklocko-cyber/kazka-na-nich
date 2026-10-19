@@ -6,6 +6,9 @@ services:
     build: .
     ports:
       - "3002:3002"
+    environment:
+      SERVER_PORT: "3002"
+      PORT: "3002"
     env_file:
       - path: .env
         required: false
