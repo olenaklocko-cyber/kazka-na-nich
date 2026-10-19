@@ -1,0 +1,10 @@
+name: ❓ Питання
+description: Питання про використання або код
+labels: ["question"]
+body:
+  - type: textarea
+    id: q
+    attributes:
+      label: Твоє питання
+    validations:
+      required: true

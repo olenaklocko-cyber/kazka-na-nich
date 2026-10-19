@@ -1,7 +1,7 @@
 {
   "name": "kazka-na-nich",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"npm run server\" \"npm run dev:ui\"",

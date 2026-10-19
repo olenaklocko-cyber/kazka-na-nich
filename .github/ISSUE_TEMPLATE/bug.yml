@@ -1,0 +1,27 @@
+name: 🐛 Знайшов помилку
+description: Щось не працює як очікувалося
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Що сталося?
+      description: Опиши кроки, щоб я могла повторити
+      placeholder: |
+        1. Відкриваю головну
+        2. Натискаю «Створити казку»
+        3. Бачу помилку …
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Де було? (посилання / браузер / пристрій)
+      placeholder: https://kazka-na-nich.vercel.app, Safari 18, iPhone
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Наскільки серйозно?
+      options: [Дрібниця, Заважає користуватися, Зовсім не працює]
+    validations:
+      required: true

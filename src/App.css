@@ -1153,3 +1153,74 @@ body {
   font-size: 15px;
   color: var(--tekst);
 }
+
+.pole-tekst {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--tekst);
+  background: var(--poverkhnya-2);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: var(--radius-malyj);
+  resize: vertical;
+}
+
+.pole-tekst:focus-visible {
+  outline: 2px solid var(--aktsent);
+  outline-offset: 2px;
+}
+
+.pidtrymka-statusy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pidtrymka-status {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--poverkhnya-2);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: var(--radius-malyj);
+}
+
+.pidtrymka-status div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pidtrymka-status span:not(.pidtrymka-cykor) {
+  font-size: 13px;
+  color: var(--tekst-2);
+}
+
+.pidtrymka-cykor {
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.pidtrymka-cykor-zelenyi { color: #2ecc71; }
+.pidtrymka-cykor-chervonyi { color: #e74c3c; }
+.pidtrymka-cykor-sivi { color: var(--tekst-2); }
+
+.pidtrymka-typy {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.pidtrymka-istoriya {
+  margin-top: 14px;
+}
+
+.pidtrymka-istoriya h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--tekst-2);
+}

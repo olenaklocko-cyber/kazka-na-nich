@@ -1,0 +1,15 @@
+name: 💡 Ідея / побажання
+description: Що варто додати або покращити
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Що хочеш бачити в продукті?
+      placeholder: Наприклад: зберігати казки в бібліотеку
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Навіщо це? (кому допоможе)

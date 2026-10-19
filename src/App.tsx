@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Analytyka from "./Analytyka";
 import OpenSource from "./OpenSource";
 import Infrastruktura from "./Infrastruktura";
+import Pidtrymka from "./Pidtrymka";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -110,14 +111,16 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
-  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra">(() =>
+  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra" | "pidtrymka">(() =>
     window.location.hash.startsWith("#analytyka")
       ? "analytyka"
       : window.location.hash.startsWith("#os")
         ? "os"
         : window.location.hash.startsWith("#infra")
           ? "infra"
-          : "kazky",
+          : window.location.hash.startsWith("#pidtrymka")
+            ? "pidtrymka"
+            : "kazky",
   );
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
@@ -157,6 +160,7 @@ export default function App() {
       if (window.location.hash.startsWith("#analytyka")) setRozdil("analytyka");
       else if (window.location.hash.startsWith("#os")) setRozdil("os");
       else if (window.location.hash.startsWith("#infra")) setRozdil("infra");
+      else if (window.location.hash.startsWith("#pidtrymka")) setRozdil("pidtrymka");
       else setRozdil("kazky");
     };
     window.addEventListener("hashchange", naHash);
@@ -559,6 +563,17 @@ export default function App() {
             >
               ⚙️ Інфраструктура
             </button>
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={rozdil === "pidtrymka"}
+              onClick={() => {
+                setRozdil("pidtrymka");
+                window.location.hash = "pidtrymka";
+              }}
+            >
+              📖 Підтримка
+            </button>
           </nav>
           {pro ? (
             <span className="pro-beydzh" role="status">
@@ -601,6 +616,8 @@ export default function App() {
         <OpenSource />
       ) : rozdil === "infra" ? (
         <Infrastruktura />
+      ) : rozdil === "pidtrymka" ? (
+        <Pidtrymka />
       ) : (
       <main className="holovne">
         <form
