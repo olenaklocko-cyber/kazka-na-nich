@@ -2,9 +2,9 @@
  * Vercel serverless: POST /api/kazka
  * Ключі (LLM_API_KEY, PRO_SECRET, LIQPAY_*) — у Vercel Environment Variables.
  */
-import type { ApiReq, ApiRes } from "../shared/api-helpers";
-import { nePost, viddaty } from "../shared/api-helpers";
-import { obrobytyKazka } from "../shared/pro";
+import type { ApiReq, ApiRes } from "../shared/api-helpers.js";
+import { nePost, viddaty } from "../shared/api-helpers.js";
+import { obrobytyKazka } from "../shared/pro.js";
 
 export default async function handler(req: ApiReq, res: ApiRes): Promise<void> {
   if (nePost(req, res)) return;

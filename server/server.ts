@@ -13,8 +13,8 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Obrobka, RobochaVidpovid } from "../shared/pro";
-import { obrobytyCheckout, obrobytyKazka, obrobytyPayConfirm, obrobytyStatus } from "../shared/pro";
+import type { Obrobka, RobochaVidpovid } from "../shared/pro.js";
+import { obrobytyCheckout, obrobytyKazka, obrobytyPayConfirm, obrobytyStatus } from "../shared/pro.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.SERVER_PORT ?? 3002);

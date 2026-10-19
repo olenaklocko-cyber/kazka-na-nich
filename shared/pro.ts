@@ -10,7 +10,7 @@
  *    перевіряє підпис сам (обійти через localStorage не можна).
  */
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import { generuvalyKazku, prochytatyZapyt } from "./kazka";
+import { generuvalyKazku, prochytatyZapyt } from "./kazka.js";
 
 /** Безкоштовний план: скільки казок можна згенерувати без оплати. */
 export const LYMIT_BEZKOShTOVYH = 3;

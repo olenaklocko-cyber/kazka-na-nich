@@ -3,7 +3,7 @@
  * Той самий хендлер shared/pro.ts, що й у dev-сервера, — щоб логіка
  * ліміту й оплати не розійшлася між локальним режимом і продакшеном.
  */
-import type { RobochaVidpovid } from "./pro";
+import type { RobochaVidpovid } from "./pro.js";
 
 export interface ApiReq {
   method?: string;
