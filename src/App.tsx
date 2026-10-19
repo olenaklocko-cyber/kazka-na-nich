@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Analytyka from "./Analytyka";
+import OpenSource from "./OpenSource";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -108,7 +109,13 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
-  const [zvit, setZvit] = useState(() => window.location.hash.startsWith("#analytyka"));
+  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os">(() =>
+    window.location.hash.startsWith("#analytyka")
+      ? "analytyka"
+      : window.location.hash.startsWith("#os")
+        ? "os"
+        : "kazky",
+  );
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
   const [vidhukTekst, setVidhukTekst] = useState("");
@@ -143,7 +150,11 @@ export default function App() {
 
   useEffect(() => {
     podie("storinka");
-    const naHash = () => setZvit(window.location.hash.startsWith("#analytyka"));
+    const naHash = () => {
+      if (window.location.hash.startsWith("#analytyka")) setRozdil("analytyka");
+      else if (window.location.hash.startsWith("#os")) setRozdil("os");
+      else setRozdil("kazky");
+    };
     window.addEventListener("hashchange", naHash);
     return () => window.removeEventListener("hashchange", naHash);
   }, []);
@@ -503,9 +514,9 @@ export default function App() {
             <button
               type="button"
               className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={!zvit}
+              aria-pressed={rozdil === "kazky"}
               onClick={() => {
-                setZvit(false);
+                setRozdil("kazky");
                 window.location.hash = "";
               }}
             >
@@ -514,13 +525,24 @@ export default function App() {
             <button
               type="button"
               className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={zvit}
+              aria-pressed={rozdil === "analytyka"}
               onClick={() => {
-                setZvit(true);
+                setRozdil("analytyka");
                 window.location.hash = "analytyka";
               }}
             >
               📈 Аналітика
+            </button>
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={rozdil === "os"}
+              onClick={() => {
+                setRozdil("os");
+                window.location.hash = "os";
+              }}
+            >
+              🌍 Open Source
             </button>
           </nav>
           {pro ? (
@@ -558,8 +580,10 @@ export default function App() {
         </div>
       </header>
 
-      {zvit ? (
-        <Analytyka onNyazh={() => setZvit(false)} />
+      {rozdil === "analytyka" ? (
+        <Analytyka onNyazh={() => setRozdil("kazky")} />
+      ) : rozdil === "os" ? (
+        <OpenSource />
       ) : (
       <main className="holovne">
         <form
