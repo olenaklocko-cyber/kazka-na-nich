@@ -70,6 +70,20 @@ const MARshruty: Record<string, (obrobka: Obrobka) => RobochaVidpovid | Promise<
   "/api/checkout": () => obrobytyCheckout(),
   "/api/pay/confirm": obrobytyPayConfirm,
   "/api/kazka": obrobytyKazka,
+  "/api/analytics": (obrobka) => {
+    const body =
+      typeof obrobka.body === "object" && obrobka.body !== null
+        ? (obrobka.body as Record<string, unknown>)
+        : {};
+    console.log(
+      JSON.stringify({
+        typ: "analytyka",
+        podiia: typeof body.n === "string" ? body.n : "nevidomo",
+        chas: typeof body.t === "number" ? body.t : Date.now(),
+      }),
+    );
+    return { status: 204, cookie: [], body: {} };
+  },
 };
 
 const server = createServer((req, res) => {

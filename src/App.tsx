@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import Analytyka from "./Analytyka";
+import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
 type Tema = "nich" | "den";
@@ -106,6 +108,12 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
+  const [zvit, setZvit] = useState(() => window.location.hash.startsWith("#analytyka"));
+  const [vidhukModalka, setVidhukModalka] = useState(false);
+  const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
+  const [vidhukTekst, setVidhukTekst] = useState("");
+  const formStartRef = useRef(false);
+
   const [oplata, setOplata] = useState<StanOplaty>(null);
   const [oplataPomylka, setOplataPomylka] = useState<string | null>(null);
   const [demoToken, setDemoToken] = useState<string | null>(null);
@@ -115,11 +123,37 @@ export default function App() {
 
   const limyt = stan?.lymitVykorystano ?? false;
   const pro = stan?.pro ?? false;
+  const proRef = useRef(false);
+
+  useEffect(() => {
+    if (limyt) podie("limit");
+  }, [limyt]);
+
+  useEffect(() => {
+    if (pro && !proRef.current) {
+      proRef.current = true;
+      podie("pro_uspikh");
+    }
+  }, [pro]);
 
   useEffect(() => {
     document.documentElement.dataset.tema = tema;
     localStorage.setItem(LS_TEMA, tema);
   }, [tema]);
+
+  useEffect(() => {
+    podie("storinka");
+    const naHash = () => setZvit(window.location.hash.startsWith("#analytyka"));
+    window.addEventListener("hashchange", naHash);
+    return () => window.removeEventListener("hashchange", naHash);
+  }, []);
+
+  /** Один раз на сесію: користувач почав заповнювати форму. */
+  const formStart = () => {
+    if (formStartRef.current) return;
+    formStartRef.current = true;
+    podie("form_start");
+  };
 
   useEffect(() => {
     const speech = window.speechSynthesis;
@@ -186,6 +220,7 @@ export default function App() {
         const vidpovid = (await res.json()) as { pro?: boolean };
         if (res.ok && vidpovid.pro) {
           localStorage.removeItem("kazka_platizh");
+          podie("oplata_pidtverdzhena");
           setOplata("uspikh");
           await zavantazhytyStan();
         }
@@ -217,6 +252,7 @@ export default function App() {
         const vidpovid = (await res.json()) as { pro?: boolean };
         if (res.ok && vidpovid.pro) {
           localStorage.removeItem("kazka_platizh");
+          podie("oplata_vidnovlena");
           setOplata("uspikh");
           await zavantazhytyStan();
         }
@@ -265,7 +301,10 @@ export default function App() {
     roz.onresult = (podiia) => {
       const ostannie = podiia.results[podiia.results.length - 1];
       const tekst = ostannie[0]?.transcript?.trim();
-      if (tekst) pryjnyaty(tekst);
+      if (tekst) {
+        podie("mikrofon", { pole });
+        pryjnyaty(tekst);
+      }
     };
     rozPiznavanniaRef.current = roz;
     roz.start();
@@ -276,6 +315,7 @@ export default function App() {
     setPomylka(null);
     if (podium === "perehlyad") setKazka(null);
     setZavantazhennya(true);
+    podie("kazka_start");
     try {
       const res = await fetch("/api/kazka", {
         ...ZAPYT,
@@ -301,9 +341,11 @@ export default function App() {
         }));
       }
       if (!res.ok || data.pomylka || !data.tekst) {
+        podie("kazka_pomylka", { prychyna: data.pomylka ?? "nevidomo" });
         setPomylka(data.pomylka ?? "Щось пішло не так — спробуй ще раз");
         return;
       }
+      podie("kazka_uspikh", { dovzhyta: data.tekst.length });
       setKazka(data.tekst);
       window.setTimeout(() => rezultatRef.current?.focus(), 60);
     } catch {
@@ -344,6 +386,7 @@ export default function App() {
     setDemoToken(null);
     setLiqpayForma(null);
     setOplata("zavantazhennya");
+    podie("oproplata_vidkryto");
     try {
       const res = await fetch("/api/checkout", { ...ZAPYT, body: "{}" });
       const data = (await res.json()) as {
@@ -360,6 +403,7 @@ export default function App() {
         setDemoToken(data.token);
         setOplata("demo");
       } else if (data.forma) {
+        podie("liqpay_kasa");
         try {
           const pl = JSON.parse(atob(data.forma.data)) as { order_id?: string };
           if (typeof pl.order_id === "string") {
@@ -395,6 +439,7 @@ export default function App() {
         setOplataPomylka(data.pomylka ?? "Не вдалося підтвердити оплату");
         return;
       }
+      podie("demo_pidtverdzheno");
       setOplata("uspikh");
       await zavantazhytyStan();
     } catch {
@@ -418,11 +463,37 @@ export default function App() {
     return () => document.removeEventListener("keydown", naEsc);
   }, [oplata]);
 
+  useEffect(() => {
+    if (!vidhukModalka) return;
+    const naEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setVidhukModalka(false);
+    };
+    document.addEventListener("keydown", naEsc);
+    return () => document.removeEventListener("keydown", naEsc);
+  }, [vidhukModalka]);
+
+  const nadislalyVidhuk = () => {
+    if (!vidhukOtsinka) return;
+    dodatyVidhuk(vidhukOtsinka, vidhukTekst.trim());
+    setVidhukModalka(false);
+  };
+
   const formaZapovnena =
     imia.trim().length > 0 || hero.trim().length > 0 || urok.trim().length > 0;
 
   const dataPro =
     stan?.proDo != null ? new Date(stan.proDo).toLocaleDateString("uk-UA") : "";
+
+  if (zvit) {
+    return (
+      <Analytyka
+        onNyazh={() => {
+          window.location.hash = "";
+          setZvit(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="kazka-dodatok">
@@ -448,6 +519,18 @@ export default function App() {
               💳 Pro — $4.99
             </button>
           )}
+          <button
+            type="button"
+            className="knopka knopka-mala"
+            aria-label="Залишити зворотний зв'язок про застосунок"
+            onClick={() => {
+              setVidhukModalka(true);
+              setVidhukOtsinka(null);
+              setVidhukTekst("");
+            }}
+          >
+            💬 Відгук
+          </button>
           <button
             type="button"
             className="knopka knopka-tema"
@@ -483,7 +566,10 @@ export default function App() {
                 placeholder="Наприклад: Мілана"
                 autoComplete="off"
                 disabled={limyt}
-                onChange={(e) => setImia(e.target.value)}
+                onChange={(e) => {
+                  formStart();
+                  setImia(e.target.value);
+                }}
               />
               <button
                 type="button"
@@ -514,7 +600,10 @@ export default function App() {
                 placeholder="Котик-космонавт"
                 autoComplete="off"
                 disabled={limyt}
-                onChange={(e) => setHero(e.target.value)}
+                onChange={(e) => {
+                  formStart();
+                  setHero(e.target.value);
+                }}
               />
               <button
                 type="button"
@@ -544,7 +633,11 @@ export default function App() {
                     className="kvadratyk"
                     disabled={limyt}
                     aria-pressed={aktivnyj}
-                    onClick={() => setHero(aktivnyj ? "" : h.nazva)}
+                    onClick={() => {
+                      formStart();
+                      podie("heroy_kvadratyk", { heroy: h.nazva });
+                      setHero(aktivnyj ? "" : h.nazva);
+                    }}
                   >
                     <span aria-hidden="true">{h.emoji}</span>
                     <span className="kvadratyk-nazva">{h.nazva}</span>
@@ -566,7 +659,10 @@ export default function App() {
                 placeholder="Наприклад: чому чистити зуби"
                 autoComplete="off"
                 disabled={limyt}
-                onChange={(e) => setUrok(e.target.value)}
+                onChange={(e) => {
+                  formStart();
+                  setUrok(e.target.value);
+                }}
               />
               <button
                 type="button"
@@ -625,7 +721,11 @@ export default function App() {
             className="knopka knopka-stvoryty"
             disabled={zavantazhennya || limyt || !formaZapovnena}
           >
-            {zavantazhennya ? "✨ Вигадую казку…" : "✨ Створити казку"}
+            {zavantazhennya
+              ? "✨ Вигадую казку…"
+              : variantAB() === "A"
+                ? "✨ Створити казку"
+                : "🌙 Казка за 10 секунд"}
           </button>
 
           {zavantazhennya && (
@@ -839,11 +939,75 @@ export default function App() {
         </form>
       )}
 
+      {vidhukModalka && (
+        <div className="oplata-fon" role="presentation" onClick={() => setVidhukModalka(false)}>
+          <div
+            className="oplata-modal vidhuk-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="zag-vidhuk"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 id="zag-vidhuk">💬 Як тобі застосунок?</h2>
+            <div className="vidhuk-otsinky" role="group" aria-label="Оцінка">
+              <button
+                type="button"
+                className={vidhukOtsinka === "plus" ? "kvadratyk kvadratyk-aktyvnyj" : "kvadratyk"}
+                aria-pressed={vidhukOtsinka === "plus"}
+                onClick={() => setVidhukOtsinka("plus")}
+              >
+                <span aria-hidden="true">👍</span>
+                <span className="kvadratyk-nazva">Подобається</span>
+              </button>
+              <button
+                type="button"
+                className={vidhukOtsinka === "minus" ? "kvadratyk kvadratyk-aktyvnyj" : "kvadratyk"}
+                aria-pressed={vidhukOtsinka === "minus"}
+                onClick={() => setVidhukOtsinka("minus")}
+              >
+                <span aria-hidden="true">👎</span>
+                <span className="kvadratyk-nazva">Є що покращити</span>
+              </button>
+            </div>
+            <label className="vidhuk-pidpis" htmlFor="vidhuk-tekst">
+              Коментар (необов'язково)
+            </label>
+            <textarea
+              id="vidhuk-tekst"
+              className="vidhuk-textarea"
+              rows={3}
+              maxLength={300}
+              value={vidhukTekst}
+              placeholder="Наприклад: хотіла би зберігати казки"
+              onChange={(e) => setVidhukTekst(e.target.value)}
+            />
+            <div className="oplata-dii">
+              <button
+                type="button"
+                className="knopka"
+                disabled={!vidhukOtsinka}
+                onClick={nadislalyVidhuk}
+              >
+                Надіслати
+              </button>
+              <button type="button" className="knopka knopka-druhynna" onClick={() => setVidhukModalka(false)}>
+                Пізніше
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <footer className="pidval">
         <p>
           🌙 Казка на ніч — навчальний продукт рівня 7. Оплату обробляє LiqPay:
           наш сервер бачить лише «оплачено», ніколи — дані картки. Зроблено з 💙
           для батьків, які втомилися вигадувати щовечора.
+        </p>
+        <p className="pidval-analytyka">
+          <a href="#analytyka" onClick={() => setZvit(true)}>
+            📈 Аналітика (для куратора)
+          </a>
         </p>
       </footer>
     </div>
