@@ -3,6 +3,7 @@ import Analytyka from "./Analytyka";
 import OpenSource from "./OpenSource";
 import Infrastruktura from "./Infrastruktura";
 import Pidtrymka from "./Pidtrymka";
+import Dokumentatsiya from "./Dokumentatsiya";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -111,7 +112,7 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
-  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra" | "pidtrymka">(() =>
+  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra" | "pidtrymka" | "dok">(() =>
     window.location.hash.startsWith("#analytyka")
       ? "analytyka"
       : window.location.hash.startsWith("#os")
@@ -120,7 +121,9 @@ export default function App() {
           ? "infra"
           : window.location.hash.startsWith("#pidtrymka")
             ? "pidtrymka"
-            : "kazky",
+            : window.location.hash.startsWith("#dok")
+              ? "dok"
+              : "kazky",
   );
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
@@ -161,6 +164,7 @@ export default function App() {
       else if (window.location.hash.startsWith("#os")) setRozdil("os");
       else if (window.location.hash.startsWith("#infra")) setRozdil("infra");
       else if (window.location.hash.startsWith("#pidtrymka")) setRozdil("pidtrymka");
+      else if (window.location.hash.startsWith("#dok")) setRozdil("dok");
       else setRozdil("kazky");
     };
     window.addEventListener("hashchange", naHash);
@@ -574,6 +578,17 @@ export default function App() {
             >
               📖 Підтримка
             </button>
+            <button
+              type="button"
+              className="knopka knopka-mala knopka-vkladka"
+              aria-pressed={rozdil === "dok"}
+              onClick={() => {
+                setRozdil("dok");
+                window.location.hash = "dok";
+              }}
+            >
+              📚 Документація
+            </button>
           </nav>
           {pro ? (
             <span className="pro-beydzh" role="status">
@@ -618,6 +633,8 @@ export default function App() {
         <Infrastruktura />
       ) : rozdil === "pidtrymka" ? (
         <Pidtrymka />
+      ) : rozdil === "dok" ? (
+        <Dokumentatsiya />
       ) : (
       <main className="holovne">
         <form
