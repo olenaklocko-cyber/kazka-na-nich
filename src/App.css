@@ -1572,7 +1572,7 @@ body {
 .landing-zagolovok {
   font-family: "Marck Script", "Caveat", cursive;
   font-weight: 400;
-  font-size: clamp(64px, 12vw, 132px);
+  font-size: clamp(72px, 11.5vw, 168px);
   line-height: 1;
   margin: 0;
   color: #fcd34d;
@@ -1591,12 +1591,17 @@ body {
 }
 
 .landing-pidkas {
+  position: relative;
+  z-index: 2;
   font-family: "Comfortaa", "Trebuchet MS", ui-rounded, sans-serif;
   max-width: 540px;
-  font-size: 13.5px;
-  line-height: 1.6;
+  margin: 0 auto;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
   color: #b9b2e0;
-  margin: 26px 0 0;
+  opacity: 0.5;
 }
 
 .landing-nizh {
