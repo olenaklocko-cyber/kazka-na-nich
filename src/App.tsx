@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import WelcomeScreen from "./WelcomeScreen";
 import MainConstructor from "./MainConstructor";
 import AdminSettingsModal, { type Rozdil } from "./AdminSettingsModal";
+import KnigaKazky, { PROFILI, type ProfilHolosu } from "./KnigaKazky";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -76,15 +77,6 @@ interface RozPiznavanniaHolosu {
   onresult: ((podiia: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
 }
 
-type ProfilHolosu = "mama" | "tato" | "charyvnyj";
-
-/** Характери озвучки: ті самі системні голоси, але з різним тембром і темпом. */
-const PROFILI: Record<ProfilHolosu, { nazva: string; pitch: number; rate: number }> = {
-  mama: { nazva: "🧸 Мама (ніжний)", pitch: 1.3, rate: 0.88 },
-  tato: { nazva: "👨 Тато (глибокий)", pitch: 0.72, rate: 0.97 },
-  charyvnyj: { nazva: "✨ Казковий", pitch: 1.5, rate: 0.85 },
-};
-
 const ZAPYT = { method: "POST", headers: { "Content-Type": "application/json" } };
 
 export default function App() {
@@ -148,6 +140,8 @@ export default function App() {
       h.startsWith("#zapusk")
     );
   });
+  const [sviyHeroy, setSviyHeroy] = useState(false);
+  const [knyhaVidkrita, setKnyhaVidkrita] = useState(false);
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
   const [vidhukTekst, setVidhukTekst] = useState("");
@@ -174,6 +168,10 @@ export default function App() {
       podie("pro_uspikh");
     }
   }, [pro]);
+
+  useEffect(() => {
+    if (kazka) setKnyhaVidkrita(true);
+  }, [kazka]);
 
   useEffect(() => {
     document.documentElement.dataset.tema = tema;
@@ -409,12 +407,12 @@ export default function App() {
     }
   };
 
-  const ozhuyvaty = () => {
+  const ozhuyvaty = (zminenyjProfil?: ProfilHolosu) => {
     if (!kazka) return;
     const speech = window.speechSynthesis;
     speech.cancel();
     const utterance = new SpeechSynthesisUtterance(kazka);
-    const prof = PROFILI[profilHolosu];
+    const prof = PROFILI[zminenyjProfil ?? profilHolosu];
     utterance.lang = mova === "uk" ? "uk-UA" : "en-US";
     utterance.rate = prof.rate;
     utterance.pitch = prof.pitch;
@@ -535,6 +533,9 @@ export default function App() {
   const formaZapovnena =
     imia.trim().length > 0 || hero.trim().length > 0 || urok.trim().length > 0;
 
+  const vybranyjHeroy = HEROY_KVADRATYKY.find((h) => h.nazva === hero.trim());
+  const pokazatySvoyho = sviyHeroy || (hero.trim() !== "" && !vybranyjHeroy);
+
   const dataPro =
     stan?.proDo != null ? new Date(stan.proDo).toLocaleDateString("uk-UA") : "";
 
@@ -639,12 +640,19 @@ export default function App() {
         >
           <h2>Створити казку</h2>
 
-          <div className="pole">
+          {pomylka && (
+            <p className="pomylka" role="alert">
+              {pomylka}
+            </p>
+          )}
+
+          <div className="pole pole-velyke">
             <label htmlFor="imia">Ім'я дитини</label>
-            <div className="pole-riadok">
+            <div className="khmara-pole">
               <input
                 id="imia"
                 type="text"
+                className="khmara-vkhid"
                 value={imia}
                 maxLength={40}
                 placeholder="Наприклад: Мілана"
@@ -657,7 +665,7 @@ export default function App() {
               />
               <button
                 type="button"
-                className="mikrofon"
+                className={`mikrofon mikrofon-velyk ${slukhae === "imia" ? "mikrofon-zapys" : ""}`}
                 disabled={limyt}
                 aria-label={
                   slukhae === "imia"
@@ -673,62 +681,86 @@ export default function App() {
           </div>
 
           <div className="pole">
-            <label htmlFor="hero">Головний герой</label>
-            <div className="pole-riadok">
-              <input
-                id="hero"
-                type="text"
-                value={hero}
-                list="spysok-heroi"
-                maxLength={60}
-                placeholder="Котик-космонавт"
-                autoComplete="off"
-                disabled={limyt}
-                onChange={(e) => {
-                  formStart();
-                  setHero(e.target.value);
-                }}
-              />
-              <button
-                type="button"
-                className="mikrofon"
-                disabled={limyt}
-                aria-label={
-                  slukhae === "hero" ? "Зупинити запис: головний герой" : "Сказати героя голосом"
-                }
-                aria-pressed={slukhae === "hero"}
-                onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
-              >
-                {slukhae === "hero" ? "⏹" : "🎤"}
-              </button>
-            </div>
-            <datalist id="spysok-heroi">
-              {HEROI.map((h) => (
-                <option key={h} value={h} />
-              ))}
-            </datalist>
-            <div className="geroy-kvadratyky" role="group" aria-label="Швидкий вибір героя">
+            <span className="heroy-zag" id="heroy-zag">
+              Головний герой
+            </span>
+            <div className="heroy-karty" role="group" aria-labelledby="heroy-zag">
               {HEROY_KVADRATYKY.map((h) => {
-                const aktivnyj = hero.trim() === h.nazva;
+                const aktivnyj = hero.trim() === h.nazva && !sviyHeroy;
                 return (
                   <button
                     key={h.nazva}
                     type="button"
-                    className="kvadratyk"
+                    className={`heroy-karta ${aktivnyj ? "heroy-karta-aktyvna" : ""}`}
                     disabled={limyt}
                     aria-pressed={aktivnyj}
                     onClick={() => {
                       formStart();
                       podie("heroy_kvadratyk", { heroy: h.nazva });
+                      setSviyHeroy(false);
                       setHero(aktivnyj ? "" : h.nazva);
                     }}
                   >
-                    <span aria-hidden="true">{h.emoji}</span>
-                    <span className="kvadratyk-nazva">{h.nazva}</span>
+                    <span className="heroy-ikonka" aria-hidden="true">
+                      {h.emoji}
+                    </span>
+                    <span className="heroy-nazva">{h.nazva}</span>
                   </button>
                 );
               })}
+              <button
+                type="button"
+                className={`heroy-karta ${pokazatySvoyho ? "heroy-karta-aktyvna" : ""}`}
+                disabled={limyt}
+                aria-pressed={pokazatySvoyho}
+                onClick={() => {
+                  formStart();
+                  setSviyHeroy(true);
+                  setHero("");
+                }}
+              >
+                <span className="heroy-ikonka" aria-hidden="true">
+                  ➕
+                </span>
+                <span className="heroy-nazva">Свій варіант</span>
+              </button>
             </div>
+            {pokazatySvoyho && (
+              <div className="pole-riadok heroy-sviy">
+                <input
+                  id="hero"
+                  type="text"
+                  value={hero}
+                  list="spysok-heroi"
+                  maxLength={60}
+                  placeholder="Впиши будь-кого: Єдиноріг-фізик 🦄"
+                  autoComplete="off"
+                  disabled={limyt}
+                  autoFocus
+                  onChange={(e) => {
+                    formStart();
+                    setHero(e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="mikrofon"
+                  disabled={limyt}
+                  aria-label={
+                    slukhae === "hero" ? "Зупинити запис: головний герой" : "Сказати героя голосом"
+                  }
+                  aria-pressed={slukhae === "hero"}
+                  onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
+                >
+                  {slukhae === "hero" ? "⏹" : "🎤"}
+                </button>
+              </div>
+            )}
+            <datalist id="spysok-heroi">
+              {HEROI.map((h) => (
+                <option key={h} value={h} />
+              ))}
+            </datalist>
           </div>
 
           <div className="pole">
@@ -843,97 +875,51 @@ export default function App() {
           )}
         </form>
 
-        <section className="rezyltat sklo" aria-label="Результат">
-          {pomylka && (
-            <p className="pomylka" role="alert">
-              {pomylka}
-            </p>
-          )}
-
-          {kazka ? (
-            <>
-              <div className="rezyltat-shapka">
-                <h2 tabIndex={-1} ref={rezultatRef}>
-                  Твоя казка
-                </h2>
-                <div className="rezyltat-knopky">
-                  <button
-                    type="button"
-                    className="knopka knopka-mala"
-                    aria-pressed={ohovorytysya}
-                    onClick={ohovorytysya ? prykynytyOzhuvannya : ozhuyvaty}
-                  >
-                    {ohovorytysya ? "⏸ Зупинити" : "▶️ Озвучити"}
-                  </button>
-                  <button
-                    type="button"
-                    className="knopka knopka-mala knopka-natural"
-                    disabled={zavantazhennya || limyt}
-                    onClick={() => void generuvaly("scheOdna")}
-                  >
-                    🔄 Ще одна
-                  </button>
-                </div>
-              </div>
-              <div className="holos-panel">
-                <fieldset>
-                  <legend>Голос оповідача</legend>
-                  <div className="holos-chipy">
-                    {(Object.keys(PROFILI) as ProfilHolosu[]).map((k) => (
-                      <button
-                        key={k}
-                        type="button"
-                        className={`chip ${profilHolosu === k ? "chip-aktyvnyj" : ""}`}
-                        aria-pressed={profilHolosu === k}
-                        onClick={() => setProfilHolosu(k)}
-                      >
-                        {PROFILI[k].nazva}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="holos-vybir">
-                    <label htmlFor="holos-systemu">Системний голос</label>
-                    <select
-                      id="holos-systemu"
-                      value={holosSystemu}
-                      onChange={(e) => setHolosSystemu(e.target.value)}
-                    >
-                      <option value="">Автоматично (найкращий доступний)</option>
-                      {holosy.map((v) => (
-                        <option key={v.voiceURI} value={v.voiceURI}>
-                          {v.name} — {v.lang}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {mova === "uk" &&
-                    holosy.length > 0 &&
-                    !holosy.some((v) => v.lang.toLowerCase().startsWith("uk")) && (
-                      <p className="holos-warh" role="note">
-                        ⚠️ На цьому пристрої немає українського голосу —
-                        звучання може бути неприродним. Спробуй профіль «Казковий»,
-                        обери голос зі списку, або створи казку 🇬🇧 англійською (там
-                        голоси якісніші).
-                      </p>
-                    )}
-                </fieldset>
-              </div>
-              <article className="kazka-tekst" lang={mova === "uk" ? "uk" : "en"}>
-                {kazka}
-              </article>
-            </>
-          ) : (
-            !pomylka && (
-              <p className="pusto">
-                Тут з'явиться твоя казка — заповни ліворуч кілька слів і натисни
-                «Створити казку». ✨
-              </p>
-            )
-          )}
-        </section>
+        {kazka && !knyhaVidkrita && (
+          <button
+            type="button"
+            className="knopka knopka-knyha-vidkryty"
+            onClick={() => setKnyhaVidkrita(true)}
+          >
+            📖 Твоя казка чекає — відкрити книгу
+          </button>
+        )}
       </main>
       </MainConstructor>
       ) : null}
+
+      {rozdil === "kazky" && kazka && knyhaVidkrita && (
+        <KnigaKazky
+          kazka={kazka}
+          imia={imia.trim()}
+          mova={mova}
+          ohovorytysya={ohovorytysya}
+          profil={profilHolosu}
+          holosSystemu={holosSystemu}
+          holosy={holosy}
+          nemaUkHolosu={
+            mova === "uk" &&
+            holosy.length > 0 &&
+            !holosy.some((v) => v.lang.toLowerCase().startsWith("uk"))
+          }
+          zavantazhennya={zavantazhennya}
+          limyt={limyt}
+          zagolovokRef={rezultatRef}
+          onZakryty={() => setKnyhaVidkrita(false)}
+          onChytatyMami={() => {
+            setProfilHolosu("mama");
+            ozhuyvaty("mama");
+          }}
+          onKazkovyiHolos={() => {
+            setProfilHolosu("charyvnyj");
+            ozhuyvaty("charyvnyj");
+          }}
+          onPrykynyty={prykynytyOzhuvannya}
+          onScheOdna={() => void generuvaly("scheOdna")}
+          onProfil={setProfilHolosu}
+          onHolos={setHolosSystemu}
+        />
+      )}
 
       {/* ==================== ДІАЛОГ ОПЛАТИ ==================== */}
       {oplata && (
