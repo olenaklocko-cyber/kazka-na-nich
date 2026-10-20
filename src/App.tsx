@@ -627,7 +627,7 @@ export default function App() {
               aria-pressed={slukhae === "imia"}
               onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
             >
-              {slukhae === "imia" ? "⏹" : "🎤"}
+              {slukhae === "imia" ? "⏹" : "✨"}
             </button>
           </div>
 
@@ -701,7 +701,7 @@ export default function App() {
                 aria-pressed={slukhae === "hero"}
                 onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
               >
-                {slukhae === "hero" ? "⏹" : "🎤"}
+                {slukhae === "hero" ? "⏹" : "✨"}
               </button>
             </div>
           )}
@@ -737,7 +737,7 @@ export default function App() {
               aria-pressed={slukhae === "urok"}
               onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
             >
-              {slukhae === "urok" ? "⏹" : "🎤"}
+              {slukhae === "urok" ? "⏹" : "✨"}
             </button>
           </div>
           <datalist id="spysok-urokiv">
@@ -749,7 +749,7 @@ export default function App() {
           <p className="holos-pidkazka" role="status">
             {slukhae
               ? "Слухаю… говори, потім натисни ⏹"
-              : (holosPomylka ?? "Не вмієш друкувати? Натисни 🎤 біля поля і скажи голосом")}
+              : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ біля поля і скажи голосом")}
           </p>
 
           <div className="mova-khrugly" role="radiogroup" aria-label="Мова казки">
