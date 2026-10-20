@@ -62,7 +62,9 @@ export default function WelcomeScreen({
         >
           <span className="misyats-svilo" aria-hidden="true" />
           <span className="misyats-tekst">
-            Почати магію ✨
+            Почати
+            <br />
+            магію ✨
           </span>
         </button>
       </div>
