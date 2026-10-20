@@ -13,6 +13,12 @@ const ZORI = Array.from({ length: 28 }, (_, i) => ({
   tryvalist: `${2 + (i % 5) * 0.7}s`,
 }));
 
+const KHMARYNKY = [
+  { klas: "khmarynka-1", trivalist: "68s", zatrymka: "0s" },
+  { klas: "khmarynka-2", trivalist: "95s", zatrymka: "-30s" },
+  { klas: "khmarynka-3", trivalist: "52s", zatrymka: "-12s" },
+];
+
 export default function WelcomeScreen({
   pro,
   dataPro,
@@ -37,8 +43,28 @@ export default function WelcomeScreen({
         ))}
       </div>
 
-      <div className="misyats" aria-hidden="true">
-        <span className="misyats-svilo" />
+      <div className="khmarynky" aria-hidden="true">
+        {KHMARYNKY.map((k) => (
+          <span
+            key={k.klas}
+            className={`khmarynka ${k.klas}`}
+            style={{ animationDuration: k.trivalist, animationDelay: k.zatrymka }}
+          />
+        ))}
+      </div>
+
+      <div className="misyats-obinka">
+        <button
+          type="button"
+          className="misyats"
+          onClick={onStart}
+          aria-label="Почати магію — відкрити конструктор казок"
+        >
+          <span className="misyats-svilo" aria-hidden="true" />
+          <span className="misyats-tekst">
+            Почати магію ✨
+          </span>
+        </button>
       </div>
 
       <div className="vedmedyk-scena" aria-hidden="true">
@@ -50,6 +76,10 @@ export default function WelcomeScreen({
         <span className="zzz zzz-1">z</span>
         <span className="zzz zzz-2">z</span>
         <span className="zzz zzz-3">z</span>
+        <div className="nochnyk">
+          <span className="nochnyk-svytilo" />
+          <span className="nochnyk-stovp" />
+        </div>
       </div>
 
       <header className="landing-verkh">
@@ -89,16 +119,15 @@ export default function WelcomeScreen({
         <p className="landing-pidzagolovok">
           Унікальна казка для твоєї дитини — за 10 секунд
         </p>
-        <button type="button" className="knopka knopka-charya" onClick={onStart}>
-          Почати магію ✨
-        </button>
         <p className="landing-pidkas">
-          Герой, імʼя та повчальний урок — і казка готова. 12 мов, озвучення, 3
-          безкоштовні спроби.
+          Натисни на світний місяць ☝ — і казка почнеться. Герой, імʼя та
+          повчальний урок. 12 мов, озвучення, 3 безкоштовні спроби.
         </p>
       </main>
 
-      <p className="landing-nizh">Ніч · місяць · затишок — дитина засинає з історією, яку придумали саме для неї</p>
+      <p className="landing-nizh">
+        Ніч · місяць · затишок — дитина засинає з історією, яку придумали саме для неї
+      </p>
     </div>
   );
 }
