@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Analytyka from "./Analytyka";
-import OpenSource from "./OpenSource";
-import Infrastruktura from "./Infrastruktura";
-import Pidtrymka from "./Pidtrymka";
-import Dokumentatsiya from "./Dokumentatsiya";
-import Zapusk from "./Zapusk";
+import WelcomeScreen from "./WelcomeScreen";
+import MainConstructor from "./MainConstructor";
+import AdminSettingsModal, { type Rozdil } from "./AdminSettingsModal";
 import { dodatyVidhuk, podie, variantAB } from "./lib/analytyka";
 
 type Mova = "uk" | "en";
@@ -113,7 +110,7 @@ export default function App() {
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
 
-  const [rozdil, setRozdil] = useState<"kazky" | "analytyka" | "os" | "infra" | "pidtrymka" | "dok" | "zapusk">(() =>
+  const [rozdil, setRozdil] = useState<Rozdil>(() =>
     window.location.hash.startsWith("#analytyka")
       ? "analytyka"
       : window.location.hash.startsWith("#os")
@@ -128,6 +125,29 @@ export default function App() {
                 ? "zapusk"
                 : "kazky",
   );
+  const [ekran, setEkran] = useState<"welcome" | "konstruktor">(() => {
+    const params = new URLSearchParams(window.location.search);
+    const h = window.location.hash;
+    const tekhnichnyj =
+      h.startsWith("#analytyka") ||
+      h.startsWith("#os") ||
+      h.startsWith("#infra") ||
+      h.startsWith("#pidtrymka") ||
+      h.startsWith("#dok") ||
+      h.startsWith("#zapusk");
+    return params.has("data") || tekhnichnyj ? "konstruktor" : "welcome";
+  });
+  const [nastroika, setNastroika] = useState(() => {
+    const h = window.location.hash;
+    return (
+      h.startsWith("#analytyka") ||
+      h.startsWith("#os") ||
+      h.startsWith("#infra") ||
+      h.startsWith("#pidtrymka") ||
+      h.startsWith("#dok") ||
+      h.startsWith("#zapusk")
+    );
+  });
   const [vidhukModalka, setVidhukModalka] = useState(false);
   const [vidhukOtsinka, setVidhukOtsinka] = useState<"plus" | "minus" | null>(null);
   const [vidhukTekst, setVidhukTekst] = useState("");
@@ -163,13 +183,20 @@ export default function App() {
   useEffect(() => {
     podie("storinka");
     const naHash = () => {
-      if (window.location.hash.startsWith("#analytyka")) setRozdil("analytyka");
-      else if (window.location.hash.startsWith("#os")) setRozdil("os");
-      else if (window.location.hash.startsWith("#infra")) setRozdil("infra");
-      else if (window.location.hash.startsWith("#pidtrymka")) setRozdil("pidtrymka");
-      else if (window.location.hash.startsWith("#dok")) setRozdil("dok");
-      else if (window.location.hash.startsWith("#zapusk")) setRozdil("zapusk");
-      else setRozdil("kazky");
+      const h = window.location.hash;
+      if (h.startsWith("#analytyka")) setRozdil("analytyka");
+      else if (h.startsWith("#os")) setRozdil("os");
+      else if (h.startsWith("#infra")) setRozdil("infra");
+      else if (h.startsWith("#pidtrymka")) setRozdil("pidtrymka");
+      else if (h.startsWith("#dok")) setRozdil("dok");
+      else if (h.startsWith("#zapusk")) setRozdil("zapusk");
+      else {
+        setRozdil("kazky");
+        setNastroika(false);
+        return;
+      }
+      setEkran("konstruktor");
+      setNastroika(true);
     };
     window.addEventListener("hashchange", naHash);
     return () => window.removeEventListener("hashchange", naHash);
@@ -511,6 +538,37 @@ export default function App() {
   const dataPro =
     stan?.proDo != null ? new Date(stan.proDo).toLocaleDateString("uk-UA") : "";
 
+  const zakrytyNastroiky = () => {
+    setNastroika(false);
+    setRozdil("kazky");
+    if (window.location.hash) window.location.hash = "";
+  };
+
+  const vidkrytyNastroiky = () => {
+    if (rozdil === "kazky" || rozdil === undefined) setRozdil("analytyka");
+    setNastroika(true);
+  };
+
+  if (ekran === "welcome") {
+    return (
+      <>
+        <WelcomeScreen
+          pro={pro}
+          dataPro={dataPro}
+          onStart={() => setEkran("konstruktor")}
+          onAktivuvaty={() => {
+            setEkran("konstruktor");
+            void vidkrytyOplatu();
+          }}
+          onSettings={vidkrytyNastroiky}
+        />
+        {nastroika && (
+          <AdminSettingsModal rozdil={rozdil} setRozdil={setRozdil} onClose={zakrytyNastroiky} />
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="kazka-dodatok">
       <header className="shapka">
@@ -526,85 +584,6 @@ export default function App() {
           </div>
         </div>
         <div className="shapka-prava">
-          <nav className="shapka-navyhay" aria-label="Розділи застосунку">
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "kazky"}
-              onClick={() => {
-                setRozdil("kazky");
-                window.location.hash = "";
-              }}
-            >
-              📖 Казки
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "analytyka"}
-              onClick={() => {
-                setRozdil("analytyka");
-                window.location.hash = "analytyka";
-              }}
-            >
-              📈 Аналітика
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "os"}
-              onClick={() => {
-                setRozdil("os");
-                window.location.hash = "os";
-              }}
-            >
-              🌍 Open Source
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "infra"}
-              onClick={() => {
-                setRozdil("infra");
-                window.location.hash = "infra";
-              }}
-            >
-              ⚙️ Інфраструктура
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "pidtrymka"}
-              onClick={() => {
-                setRozdil("pidtrymka");
-                window.location.hash = "pidtrymka";
-              }}
-            >
-              📖 Підтримка
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "dok"}
-              onClick={() => {
-                setRozdil("dok");
-                window.location.hash = "dok";
-              }}
-            >
-              📚 Документація
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-mala knopka-vkladka"
-              aria-pressed={rozdil === "zapusk"}
-              onClick={() => {
-                setRozdil("zapusk");
-                window.location.hash = "zapusk";
-              }}
-            >
-              🏆 Запуск
-            </button>
-          </nav>
           {pro ? (
             <span className="pro-beydzh" role="status">
               ✨ Pro{dataPro ? ` до ${dataPro}` : ""}
@@ -637,22 +616,19 @@ export default function App() {
           >
             {tema === "nich" ? "☀️" : "🌙"}
           </button>
+          <button
+            type="button"
+            className="shestirnia shestirnia-shapka"
+            aria-label="Налаштування (технічні розділи)"
+            onClick={vidkrytyNastroiky}
+          >
+            ⚙️
+          </button>
         </div>
       </header>
 
-      {rozdil === "analytyka" ? (
-        <Analytyka onNyazh={() => setRozdil("kazky")} />
-      ) : rozdil === "os" ? (
-        <OpenSource />
-      ) : rozdil === "infra" ? (
-        <Infrastruktura />
-      ) : rozdil === "pidtrymka" ? (
-        <Pidtrymka />
-      ) : rozdil === "dok" ? (
-        <Dokumentatsiya />
-      ) : rozdil === "zapusk" ? (
-        <Zapusk />
-      ) : (
+      {rozdil === "kazky" ? (
+      <MainConstructor>
       <main className="holovne">
         <form
           className="generator sklo"
@@ -956,7 +932,8 @@ export default function App() {
           )}
         </section>
       </main>
-      )}
+      </MainConstructor>
+      ) : null}
 
       {/* ==================== ДІАЛОГ ОПЛАТИ ==================== */}
       {oplata && (
@@ -1105,6 +1082,10 @@ export default function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {nastroika && (
+        <AdminSettingsModal rozdil={rozdil} setRozdil={setRozdil} onClose={zakrytyNastroiky} />
       )}
 
       <footer className="pidval">
