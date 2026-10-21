@@ -600,47 +600,11 @@ export default function App() {
             </p>
           )}
 
-          <div className="khmara-imia name-input-container">
-            <svg
-              className="khmara-svg"
-              viewBox="0 0 1200 420"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <defs>
-                <linearGradient id="khmara-grad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="50%" stopColor="#edf6fe" />
-                  <stop offset="100%" stopColor="#bfe0fa" />
-                </linearGradient>
-                <clipPath id="khmara-clip">
-                  <path d="M80 290 A130 120 0 0 1 350 232 A215 178 0 0 1 770 222 A155 135 0 0 1 1055 262 A85 80 0 0 1 1115 328 Q1065 388 965 356 Q865 405 762 360 Q662 410 560 364 Q460 405 358 358 Q258 395 172 352 Q98 328 80 290 Z" />
-                </clipPath>
-              </defs>
-              <path
-                d="M80 290 A130 120 0 0 1 350 232 A215 178 0 0 1 770 222 A155 135 0 0 1 1055 262 A85 80 0 0 1 1115 328 Q1065 388 965 356 Q865 405 762 360 Q662 410 560 364 Q460 405 358 358 Q258 395 172 352 Q98 328 80 290 Z"
-                fill="url(#khmara-grad)"
-                stroke="#5ba3e8"
-                strokeWidth="13"
-                strokeLinejoin="round"
-              />
-              <g clipPath="url(#khmara-clip)">
-                <ellipse
-                  cx="400"
-                  cy="180"
-                  rx="200"
-                  ry="68"
-                  fill="#ffffff"
-                  opacity="0.85"
-                  transform="rotate(-8 400 180)"
-                />
-                <ellipse cx="800" cy="310" rx="220" ry="55" fill="#d8edfd" opacity="0.6" />
-              </g>
-            </svg>
+          <div className="magic-cloud-input">
             <input
               id="imia"
               type="text"
-              className="khmara-imia-vkhid"
+              className="cloud-inner-input"
               value={imia}
               maxLength={40}
               placeholder="Як звати нашого маленького героя?"
@@ -653,7 +617,7 @@ export default function App() {
             />
             <button
               type="button"
-              className={`khmara-mikrofon ${slukhae === "imia" ? "khmara-mikrofon-zapys" : ""}`}
+              className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
               disabled={limyt}
               aria-label={
                 slukhae === "imia"
@@ -663,23 +627,7 @@ export default function App() {
               aria-pressed={slukhae === "imia"}
               onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
             >
-              {slukhae === "imia" ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="6" y="6" width="12" height="12" rx="2" fill="#fff" />
-                </svg>
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="9" y="2" width="6" height="12" rx="3" fill="#fff" />
-                  <path
-                    d="M5 11a7 7 0 0 0 14 0"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <line x1="12" y1="18" x2="12" y2="22" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              )}
+              {slukhae === "imia" ? "⏹" : "✨"}
             </button>
           </div>
 
