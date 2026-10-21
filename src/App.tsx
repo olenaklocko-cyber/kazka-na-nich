@@ -601,6 +601,42 @@ export default function App() {
           )}
 
           <div className="khmara-imia name-input-container">
+            <svg
+              className="khmara-svg"
+              viewBox="0 0 640 118"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              {/* Тіло хмари: прямокутник + горбики зверху та знизу */}
+              <g fill="#f0f7ff">
+                <rect x="30" y="42" width="580" height="54" rx="27" />
+                <circle cx="32" cy="72" r="30" />
+                <circle cx="75" cy="58" r="30" />
+                <circle cx="165" cy="42" r="38" />
+                <circle cx="275" cy="50" r="32" />
+                <circle cx="385" cy="46" r="40" />
+                <circle cx="485" cy="52" r="34" />
+                <circle cx="560" cy="58" r="28" />
+                <circle cx="608" cy="72" r="28" />
+                <circle cx="90" cy="88" r="24" />
+                <circle cx="200" cy="92" r="22" />
+                <circle cx="320" cy="90" r="24" />
+                <circle cx="440" cy="92" r="22" />
+                <circle cx="545" cy="88" r="24" />
+              </g>
+              {/* Блискітки, як на мультяшці */}
+              <g fill="#ffffff" opacity="0.9">
+                <ellipse cx="150" cy="28" rx="16" ry="7" transform="rotate(-18 150 28)" />
+                <ellipse cx="370" cy="24" rx="18" ry="8" transform="rotate(-14 370 24)" />
+                <ellipse cx="548" cy="46" rx="10" ry="5" transform="rotate(-20 548 46)" />
+              </g>
+              {/* Ніжно-блакитні «складочки», як на картинці */}
+              <g fill="none" stroke="#5aade8" strokeWidth="3.5" strokeLinecap="round" opacity="0.75">
+                <path d="M 115 76 q 28 16 56 0" />
+                <path d="M 300 72 q 32 18 64 0" />
+                <path d="M 448 74 q 24 14 48 0" />
+              </g>
+            </svg>
             <input
               id="imia"
               type="text"
