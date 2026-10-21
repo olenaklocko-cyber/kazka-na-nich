@@ -2287,145 +2287,166 @@ body {
   align-items: center;
 }
 
-/* --- ГОЛОВНИЙ РОЗКЛАД: Лівий Сувій + Права Галявина --- */
+/* --- РОЗКЛАД: поля по кутках, герої по центру --- */
 .chytka-dvir {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   padding: 40px;
-  gap: 36px;
   width: 100%;
   max-width: 1320px;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
-/* ЛІВА ЗОНА — Чарівна Книга Нотаток */
-.chytka-leva-zona {
-  width: 35%;
-  min-width: 320px;
+/* Центр — герої та фінальна кнопка (нижче плаваючої хмаринки) */
+.chytka-tsyentr {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-}
-
-/* Сторінка чарівної книги / пергаменту */
-.chytka-knyha {
   width: 100%;
-  background: #fdf6e2; /* Теплий кремовий папір */
-  border-radius: 20px;
-  border: 2px solid rgba(160, 120, 50, 0.45); /* Тонка золотисто-коричнева рамка */
-  box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.3),
-    inset 0 0 60px rgba(214, 181, 116, 0.18);
-  padding: 30px 26px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
+  max-width: 860px;
+  margin: 110px auto 0;
 }
 
-/* Легка текстура сторінки */
-.chytka-knyha::before {
+@media (max-width: 900px) {
+  .chytka-tsyentr {
+    margin-top: 0;
+  }
+}
+
+/* Верхній лівий кут — Хмаринка Імені */
+.kut-khmara-imia {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: min(340px, 30%);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 30px;
+  padding: 15px 20px;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.kut-nadpis {
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: #1e1b4b;
+  margin: 0;
+}
+
+.kut-khmara-imia .magic-cloud-input {
+  width: 100%;
+  max-width: none;
+  background: #ffffff;
+  border: 1.5px solid rgba(124, 58, 237, 0.18);
+  box-shadow: none;
+  height: 52px;
+  padding: 8px 10px 8px 18px;
+}
+
+.kut-khmara-imia .magic-cloud-input:focus-within {
+  border-color: rgba(124, 58, 237, 0.45);
+}
+
+.kut-khmara-imia .holos-pidkazka {
+  font-size: 11.5px;
+  color: #7c3aed;
+  margin: 0;
+}
+
+/* Нижній правий кут — Сувій Уроку */
+.kut-suvij-uroku {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+  width: min(330px, 30%);
+  background: #fdf6e2; /* Теплий світло-бежевий пергамент */
+  border: 2px solid rgba(160, 120, 50, 0.45); /* Тонка коричнева рамка */
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  padding: 16px 18px;
+  transform: rotate(4deg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.3s ease;
+}
+
+.kut-suvij-uroku:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Легка текстура пергаменту */
+.kut-suvij-uroku::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 28px,
-      rgba(160, 120, 50, 0.06) 28px,
-      rgba(160, 120, 50, 0.06) 29px
-    );
-  border-radius: 18px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 24px,
+    rgba(160, 120, 50, 0.06) 24px,
+    rgba(160, 120, 50, 0.06) 25px
+  );
+  border-radius: 13px;
 }
 
-.chytka-knyha > * {
+.kut-suvij-uroku > * {
   position: relative;
   z-index: 1;
 }
 
-.knyha-nadpis {
-  font-family: "Comfortaa", ui-rounded, sans-serif;
-  font-weight: 800;
-  font-size: 17px;
-  color: #5c4317; /* Теплий коричневий, як чорнило на пергаменті */
-  text-align: left;
-  align-self: flex-start;
-  margin: 8px 0 0;
-  line-height: 1.3;
-}
-
-.knyha-nadpis:first-of-type {
-  margin-top: 0;
-}
-
-/* Поля всередині книги — напівпрозорі на кремовому папері */
-.chytka-knyha .magic-cloud-input {
+.kut-suvij-uroku .khmara-imia {
   width: 100%;
   max-width: none;
   background: rgba(255, 255, 255, 0.7);
   border: 1.5px solid rgba(160, 120, 50, 0.3);
+  border-radius: 12px;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 8px 10px 8px 16px;
+  margin-bottom: 0;
 }
 
-.chytka-knyha .magic-cloud-input:focus-within {
-  background: rgba(255, 255, 255, 0.9);
+.kut-suvij-uroku .khmara-imia:focus-within {
+  background: rgba(255, 255, 255, 0.92);
   border-color: rgba(245, 158, 11, 0.6);
 }
 
-.chytka-knyha .khmara-imia {
-  width: 100%;
-  max-width: none;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1.5px solid rgba(160, 120, 50, 0.3);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.chytka-knyha .khmara-imia:focus-within {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(245, 158, 11, 0.6);
-}
-
-.chytka-knyha .pomylka {
-  width: 100%;
-  margin: 0;
-}
-
-/* Зірочка-мікрофон чітко виділяється на папері */
-.chytka-knyha .star-mic-btn {
-  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.55);
-}
-
-/* Права зона — Чарівна Галявина */
-.chytka-haljavyna {
-  width: 60%;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 10px;
-}
-
-/* Мобільний: сувій поверх галявини */
+/* Мобільний: кути стають звичайними блоками */
 @media (max-width: 900px) {
   .chytka-dvir {
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 16px;
-    gap: 28px;
+    padding: 90px 16px 40px;
+    gap: 24px;
   }
 
-  .chytka-leva-zona,
-  .chytka-haljavyna {
+  .kut-khmara-imia,
+  .kut-suvij-uroku {
+    position: static;
     width: 100%;
-    max-width: 560px;
-    min-width: 0;
+    max-width: 480px;
+    animation: none;
+    transform: none;
+    order: 0;
+  }
+
+  .kut-suvij-uroku:hover {
+    transform: scale(1.02);
   }
 }
 
