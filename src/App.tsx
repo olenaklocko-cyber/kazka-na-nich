@@ -660,9 +660,9 @@ export default function App() {
               />
             </div>
 
-            <svg className="kulyka-nitka" viewBox="0 0 100 160" aria-hidden="true">
+            <svg className="kulyka-nitka" viewBox="0 0 200 420" aria-hidden="true">
               <path
-                d="M55 8 C 60 60, 58 110, 56 150"
+                d="M188 10 C 130 55, 54 115, 55 225 C 56 300, 68 325, 79 345"
                 fill="none"
                 stroke="#F2D06B"
                 strokeWidth="3.5"
