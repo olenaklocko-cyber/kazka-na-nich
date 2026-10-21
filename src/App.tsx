@@ -588,234 +588,241 @@ export default function App() {
       >
       <main className="chytka-forma-tilo">
         <form
-          className="chytka-forma"
+          className="chytka-dvir"
           onSubmit={(e) => {
             e.preventDefault();
             void generuvaly();
           }}
         >
-          {pomylka && (
-            <p className="pomylka" role="alert">
-              {pomylka}
-            </p>
-          )}
+          {/* ЛІВА ЗОНА — Чарівний Сувій (введення даних) */}
+          <section className="chytka-suvij" aria-label="Введення даних казки">
+            {pomylka && (
+              <p className="pomylka" role="alert">
+                {pomylka}
+              </p>
+            )}
 
-          <div className="magic-cloud-input">
-            <input
-              id="imia"
-              type="text"
-              className="cloud-inner-input"
-              value={imia}
-              maxLength={40}
-              placeholder="Як звати нашого маленького героя?"
-              autoComplete="off"
-              disabled={limyt}
-              onChange={(e) => {
-                formStart();
-                setImia(e.target.value);
-              }}
-            />
-            <button
-              type="button"
-              className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
-              disabled={limyt}
-              aria-label={
-                slukhae === "imia"
-                  ? "Зупинити запис: ім'я дитини"
-                  : "Сказати ім'я дитини голосом"
-              }
-              aria-pressed={slukhae === "imia"}
-              onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
-            >
-              {slukhae === "imia" ? "⏹" : "✨"}
-            </button>
-          </div>
+            <h2 className="suvij-zagolovok">✨ Як звати нашого маленького героя?</h2>
 
-          <div className="heroy-sitka" role="group" aria-label="Головний герой">
-            {HEROY_KVADRATYKY.map((h) => {
-              const aktivnyj = hero.trim() === h.nazva && !sviyHeroy;
-              return (
-                <button
-                  key={h.nazva}
-                  type="button"
-                  className={`heroy-blyskavka ${aktivnyj ? "heroy-blyskavka-aktyvna" : ""}`}
-                  disabled={limyt}
-                  aria-pressed={aktivnyj}
-                  onClick={() => {
-                    formStart();
-                    podie("heroy_kvadratyk", { heroy: h.nazva });
-                    setSviyHeroy(false);
-                    setHero(aktivnyj ? "" : h.nazva);
-                  }}
-                >
-                  {/* Плейсхолдер для об'ємної картинки іграшки */}
-                  <span className="heroy-obraz" aria-hidden="true">
-                    {h.emoji}
-                  </span>
-                  <span className="heroy-pidpis">{h.nazva}</span>
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              className={`heroy-blyskavka ${pokazatySvoyho ? "heroy-blyskavka-aktyvna" : ""}`}
-              disabled={limyt}
-              aria-pressed={pokazatySvoyho}
-              onClick={() => {
-                formStart();
-                setSviyHeroy(true);
-                setHero("");
-              }}
-            >
-              <span className="heroy-obraz" aria-hidden="true">
-                ➕
-              </span>
-              <span className="heroy-pidpis">Свій варіант</span>
-            </button>
-          </div>
-          {pokazatySvoyho && (
-            <div className="heroy-sviy-khmara">
+            <div className="magic-cloud-input">
               <input
-                id="hero"
+                id="imia"
                 type="text"
-                className="heroy-sviy-vkhid"
-                value={hero}
-                list="spysok-heroi"
-                maxLength={60}
-                placeholder="Впиши будь-кого: Єдиноріг-фізик 🦄"
+                className="cloud-inner-input"
+                value={imia}
+                maxLength={40}
+                placeholder="Введи ім'я..."
                 autoComplete="off"
                 disabled={limyt}
-                autoFocus
                 onChange={(e) => {
                   formStart();
-                  setHero(e.target.value);
+                  setImia(e.target.value);
                 }}
               />
               <button
                 type="button"
-                className="khmara-mikrofon khmara-mikrofon-malyj"
+                className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
                 disabled={limyt}
                 aria-label={
-                  slukhae === "hero" ? "Зупинити запис: головний герой" : "Сказати героя голосом"
+                  slukhae === "imia"
+                    ? "Зупинити запис: ім'я дитини"
+                    : "Сказати ім'я дитини голосом"
                 }
-                aria-pressed={slukhae === "hero"}
-                onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
+                aria-pressed={slukhae === "imia"}
+                onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
               >
-                {slukhae === "hero" ? "⏹" : "✨"}
+                {slukhae === "imia" ? "⏹" : "✨"}
               </button>
             </div>
-          )}
-          <datalist id="spysok-heroi">
-            {HEROI.map((h) => (
-              <option key={h} value={h} />
-            ))}
-          </datalist>
 
-          <div className="khmara-imia khmara-mensha">
-            <input
-              id="urok"
-              type="text"
-              className="khmara-imia-vkhid"
-              value={urok}
-              list="spysok-urokiv"
-              maxLength={80}
-              placeholder="Повчальний урок: чому чистити зуби?"
-              autoComplete="off"
-              disabled={limyt}
-              onChange={(e) => {
-                formStart();
-                setUrok(e.target.value);
-              }}
-            />
+            <div className="khmara-imia khmara-mensha">
+              <input
+                id="urok"
+                type="text"
+                className="khmara-imia-vkhid"
+                value={urok}
+                list="spysok-urokiv"
+                maxLength={80}
+                placeholder="Повчальний урок: чому чистити зуби?"
+                autoComplete="off"
+                disabled={limyt}
+                onChange={(e) => {
+                  formStart();
+                  setUrok(e.target.value);
+                }}
+              />
+              <button
+                type="button"
+                className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
+                disabled={limyt}
+                aria-label={
+                  slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
+                }
+                aria-pressed={slukhae === "urok"}
+                onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
+              >
+                {slukhae === "urok" ? "⏹" : "✨"}
+              </button>
+            </div>
+            <datalist id="spysok-urokiv">
+              {UROKY.map((u) => (
+                <option key={u} value={u} />
+              ))}
+            </datalist>
+
+            <p className="holos-pidkazka" role="status">
+              {slukhae
+                ? "Слухаю… говори, потім натисни ⏹"
+                : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ біля поля і скажи голосом")}
+            </p>
+
+            <div className="mova-khrugly" role="radiogroup" aria-label="Мова казки">
+              <label className={`mova-pilyuka ${mova === "uk" ? "mova-pilyuka-aktyvna" : ""}`}>
+                <input
+                  type="radio"
+                  name="mova"
+                  checked={mova === "uk"}
+                  disabled={limyt}
+                  onChange={() => setMova("uk")}
+                />
+                🇺🇦 Українська
+              </label>
+              <label className={`mova-pilyuka ${mova === "en" ? "mova-pilyuka-aktyvna" : ""}`}>
+                <input
+                  type="radio"
+                  name="mova"
+                  checked={mova === "en"}
+                  disabled={limyt}
+                  onChange={() => setMova("en")}
+                />
+                🇬🇧 English
+              </label>
+            </div>
+
             <button
-              type="button"
-              className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
-              disabled={limyt}
-              aria-label={
-                slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
-              }
-              aria-pressed={slukhae === "urok"}
-              onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
+              type="submit"
+              className="zirka-knopka"
+              disabled={zavantazhennya || limyt || !formaZapovnena}
             >
-              {slukhae === "urok" ? "⏹" : "✨"}
+              {zavantazhennya
+                ? "✨ Вигадую казку…"
+                : variantAB() === "A"
+                  ? "✨ Створити казку"
+                  : "🌙 Казка за 10 секунд"}
             </button>
-          </div>
-          <datalist id="spysok-urokiv">
-            {UROKY.map((u) => (
-              <option key={u} value={u} />
-            ))}
-          </datalist>
 
-          <p className="holos-pidkazka" role="status">
-            {slukhae
-              ? "Слухаю… говори, потім натисни ⏹"
-              : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ біля поля і скажи голосом")}
-          </p>
-
-          <div className="mova-khrugly" role="radiogroup" aria-label="Мова казки">
-            <label className={`mova-pilyuka ${mova === "uk" ? "mova-pilyuka-aktyvna" : ""}`}>
-              <input
-                type="radio"
-                name="mova"
-                checked={mova === "uk"}
-                disabled={limyt}
-                onChange={() => setMova("uk")}
-              />
-              🇺🇦 Українська
-            </label>
-            <label className={`mova-pilyuka ${mova === "en" ? "mova-pilyuka-aktyvna" : ""}`}>
-              <input
-                type="radio"
-                name="mova"
-                checked={mova === "en"}
-                disabled={limyt}
-                onChange={() => setMova("en")}
-              />
-              🇬🇧 English
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className="zirka-knopka"
-            disabled={zavantazhennya || limyt || !formaZapovnena}
-          >
-            {zavantazhennya
-              ? "✨ Вигадую казку…"
-              : variantAB() === "A"
-                ? "✨ Створити казку"
-                : "🌙 Казка за 10 секунд"}
-          </button>
-
-          {zavantazhennya && (
-            <p className="generuvalno" role="status">
-              ✨ Генерую казку… це займе близько 10 секунд
-            </p>
-          )}
-
-          {pro ? (
-            <p className="lichylnyk" role="status">
-              ✨ Pro активно{dataPro ? ` до ${dataPro}` : ""} — безліміт казок
-            </p>
-          ) : (
-            <p className="lichylnyk" role="status">
-              Безкоштовних казок лишилось: {stan ? stan.lyshylosya : "…"} з{" "}
-              {stan?.limit ?? 3}
-            </p>
-          )}
-
-          {limyt && (
-            <div className="limyt-khmara" role="status">
-              <p className="limyt-zagolovok">🎁 Безкоштовні казки закінчились</p>
-              <p>
-                Pro за $4.99 (разово, на 30 днів): безліміт казок, а далі — різні
-                голоси ШІ та збереження історії.
+            {zavantazhennya && (
+              <p className="generuvalno" role="status">
+                ✨ Генерую казку… це займе близько 10 секунд
               </p>
-              <button type="button" className="knopka" onClick={() => void vidkrytyOplatu()}>
-                💳 Оновити до Pro — $4.99
+            )}
+
+            {pro ? (
+              <p className="lichylnyk" role="status">
+                ✨ Pro активно{dataPro ? ` до ${dataPro}` : ""} — безліміт казок
+              </p>
+            ) : (
+              <p className="lichylnyk" role="status">
+                Безкоштовних казок лишилось: {stan ? stan.lyshylosya : "…"} з{" "}
+                {stan?.limit ?? 3}
+              </p>
+            )}
+
+            {limyt && (
+              <div className="limyt-khmara" role="status">
+                <p className="limyt-zagolovok">🎁 Безкоштовні казки закінчились</p>
+                <p>
+                  Pro за $4.99 (разово, на 30 днів): безліміт казок, а далі — різні
+                  голоси ШІ та збереження історії.
+                </p>
+                <button type="button" className="knopka" onClick={() => void vidkrytyOplatu()}>
+                  💳 Оновити до Pro — $4.99
+                </button>
+              </div>
+            )}
+          </section>
+
+          {/* ПРАВА ЗОНА — Чарівна Галявина (вибір героя) */}
+          <section className="chytka-haljavyna" aria-label="Вибір головного героя">
+            <div className="heroy-sitka" role="group" aria-label="Головний герой">
+              {HEROY_KVADRATYKY.map((h) => {
+                const aktivnyj = hero.trim() === h.nazva && !sviyHeroy;
+                return (
+                  <button
+                    key={h.nazva}
+                    type="button"
+                    className={`heroy-blyskavka ${aktivnyj ? "heroy-blyskavka-aktyvna" : ""}`}
+                    disabled={limyt}
+                    aria-pressed={aktivnyj}
+                    onClick={() => {
+                      formStart();
+                      podie("heroy_kvadratyk", { heroy: h.nazva });
+                      setSviyHeroy(false);
+                      setHero(aktivnyj ? "" : h.nazva);
+                    }}
+                  >
+                    <span className="heroy-obraz" aria-hidden="true">
+                      {h.emoji}
+                    </span>
+                    <span className="heroy-pidpis">{h.nazva}</span>
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                className={`heroy-blyskavka ${pokazatySvoyho ? "heroy-blyskavka-aktyvna" : ""}`}
+                disabled={limyt}
+                aria-pressed={pokazatySvoyho}
+                onClick={() => {
+                  formStart();
+                  setSviyHeroy(true);
+                  setHero("");
+                }}
+              >
+                <span className="heroy-obraz" aria-hidden="true">
+                  ➕
+                </span>
+                <span className="heroy-pidpis">Свій варіант</span>
               </button>
             </div>
-          )}
+            {pokazatySvoyho && (
+              <div className="heroy-sviy-khmara">
+                <input
+                  id="hero"
+                  type="text"
+                  className="heroy-sviy-vkhid"
+                  value={hero}
+                  list="spysok-heroi"
+                  maxLength={60}
+                  placeholder="Впиши будь-кого: Єдиноріг-фізик 🦄"
+                  autoComplete="off"
+                  disabled={limyt}
+                  autoFocus
+                  onChange={(e) => {
+                    formStart();
+                    setHero(e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="khmara-mikrofon khmara-mikrofon-malyj"
+                  disabled={limyt}
+                  aria-label={
+                    slukhae === "hero" ? "Зупинити запис: головний герой" : "Сказати героя голосом"
+                  }
+                  aria-pressed={slukhae === "hero"}
+                  onClick={() => slukhaty("hero", (t) => setHero((p) => (p ? `${p} ` : "") + t))}
+                >
+                  {slukhae === "hero" ? "⏹" : "✨"}
+                </button>
+              </div>
+            )}
+            <datalist id="spysok-heroi">
+              {HEROI.map((h) => (
+                <option key={h} value={h} />
+              ))}
+            </datalist>
+          </section>
         </form>
 
         {kazka && !knyhaVidkrita && (
