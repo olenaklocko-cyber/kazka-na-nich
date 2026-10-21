@@ -2322,8 +2322,8 @@ body {
   top: 8px;
   left: 8px;
   z-index: 5;
-  width: 252px;
-  height: 500px;
+  width: 340px;
+  height: 670px;
   background: none;
   border: none;
   box-shadow: none;
@@ -2349,21 +2349,23 @@ body {
 /* Підказка під ведмедиком — світлий текст на нічному тлі */
 .kut-khmara-imia .holos-pidkazka {
   position: absolute;
-  top: 448px;
+  top: 614px;
   left: 0;
-  width: 220px;
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.72);
+  width: 300px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
   margin: 0;
+  line-height: 1.35;
+  text-align: center;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
 /* --- Повітряна кулька (сама є полем для імені) --- */
 .kulyka {
   position: absolute;
-  top: 4px;
-  left: 46px;
-  width: 190px;
+  top: 0;
+  left: 40px;
+  width: 280px;
   height: 190px;
   border-radius: 50%;
   background: radial-gradient(circle at 34% 28%, #FFFDF2 0%, #FDECB4 42%, #F8D97A 78%, #EFBE4F 100%);
@@ -2386,10 +2388,10 @@ body {
 .kulyka::after {
   content: "";
   position: absolute;
-  top: 24px;
-  left: 34px;
-  width: 54px;
-  height: 30px;
+  top: 22px;
+  left: 46px;
+  width: 70px;
+  height: 34px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.8);
   transform: rotate(-28deg);
@@ -2411,25 +2413,26 @@ body {
 }
 
 .kut-khmara-imia .kut-nadpis {
-  color: #8a5a1b;
-  font-size: 14.5px;
+  color: #312e81;
+  font-size: 15.5px;
+  font-weight: 800;
   line-height: 1.2;
   margin: 0;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .kulyka-vkhid {
-  width: 150px;
+  width: 210px;
   border: none;
   outline: none;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.65);
   border-radius: 30px;
-  padding: 9px 10px;
+  padding: 10px 12px;
   text-align: center;
   font-family: "Comfortaa", ui-rounded, sans-serif;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
-  color: #6b4312;
+  color: #312e81;
   box-shadow:
     inset 2px 3px 7px rgba(150, 110, 30, 0.28),
     inset -1px -2px 5px rgba(255, 255, 255, 0.8);
@@ -2438,7 +2441,7 @@ body {
 }
 
 .kulyka-vkhid::placeholder {
-  color: #b99a55;
+  color: #7c74b8;
   font-weight: 500;
 }
 
@@ -2452,10 +2455,10 @@ body {
 /* Ниточка від кульки до лапи ведмедика */
 .kulyka-nitka {
   position: absolute;
-  top: 188px;
-  left: 70px;
-  width: 140px;
-  height: 160px;
+  top: 185px;
+  left: 150px;
+  width: 130px;
+  height: 190px;
   pointer-events: none;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
 }
@@ -2463,8 +2466,8 @@ body {
 /* Чарівна зірочка-брелок на ниточці під кулькою */
 .brelok {
   position: absolute;
-  top: 152px;
-  left: 196px;
+  top: 121px;
+  left: 19px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2472,21 +2475,25 @@ body {
 
 .brelok-nitka {
   width: 2px;
-  height: 46px;
+  height: 40px;
   background: linear-gradient(180deg, #e9b94e, #fde68a);
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Плюшевий ведмедик */
-.vedmedyk-svg {
+.vedmedyk-svg,
+.vedmedyk-lapky {
   position: absolute;
-  top: 240px;
+  top: 210px;
   left: 0;
-  width: 158px;
+  width: 316px;
   height: auto;
-  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
   pointer-events: none;
+}
+
+.vedmedyk-svg {
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
 }
 
 /* Текст у книжечці — акуратний книжковий шрифт */
@@ -2624,7 +2631,8 @@ body {
     position: static;
   }
 
-  .kulyka-nitka {
+  .kulyka-nitka,
+  .vedmedyk-lapky {
     display: none;
   }
 
@@ -2635,7 +2643,7 @@ body {
 
   .vedmedyk-svg {
     position: static;
-    width: 140px;
+    width: 240px;
     margin-top: 10px;
   }
 
@@ -2757,23 +2765,42 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Брелок — блискуча зірочка, що висить на ниточці */
+/* Брелок — золота зірка зі значком мікрофона, що висить на ниточці */
 .star-mic-btn:hover:not(:disabled) {
   transform: scale(1.1);
 }
 
 .brelok .star-mic-btn {
-  background: radial-gradient(circle at 32% 28%, #fffbe6 0%, #fde68a 45%, #fbbf24 100%) !important;
-  box-shadow:
-    0 0 22px rgba(253, 224, 71, 0.9),
-    0 6px 14px rgba(0, 0, 0, 0.35),
-    inset -3px -4px 8px rgba(180, 120, 20, 0.45),
-    inset 3px 4px 8px rgba(255, 255, 255, 0.85);
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle at 35% 30%, #fff7cf 0%, #fde68a 45%, #f59e0b 100%) !important;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  box-shadow: none;
+  filter: drop-shadow(0 0 12px rgba(253, 224, 71, 0.95)) drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
   animation: brelok-gaya 2.6s ease-in-out infinite;
 }
 
 .brelok .star-mic-btn:hover:not(:disabled) {
-  transform: scale(1.12) rotate(8deg);
+  transform: scale(1.12);
+}
+
+.brelok-symbol {
+  width: 22px;
+  height: 22px;
+  display: block;
+  margin-top: -6px;
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.6));
 }
 
 @keyframes brelok-gaya {
@@ -2787,16 +2814,12 @@ body {
 
 @keyframes kut-mikrofon-puls {
   0%, 100% {
-    box-shadow:
-      0 0 22px rgba(253, 224, 71, 0.9),
-      0 6px 14px rgba(0, 0, 0, 0.35),
-      0 0 0 0 rgba(239, 68, 68, 0.5);
+    filter: drop-shadow(0 0 12px rgba(253, 224, 71, 0.95)) drop-shadow(0 0 0 rgba(239, 68, 68, 0.6));
+    transform: scale(1);
   }
   50% {
-    box-shadow:
-      0 0 22px rgba(253, 224, 71, 0.9),
-      0 6px 14px rgba(0, 0, 0, 0.35),
-      0 0 0 10px rgba(239, 68, 68, 0);
+    filter: drop-shadow(0 0 20px rgba(253, 224, 71, 1)) drop-shadow(0 0 12px rgba(239, 68, 68, 0.75));
+    transform: scale(1.1);
   }
 }
 
