@@ -625,14 +625,14 @@ export default function App() {
             void generuvaly();
           }}
         >
-          {/* Хмаринка Імені — верхній лівий кут */}
+          {/* Верхній лівий кут — Плюшевий ведмедик із повітряною кулькою */}
           <div className="kut-khmara-imia">
-            <p className="kut-nadpis">Як звати малюка?</p>
-            <div className="magic-cloud-input">
+            <div className="kulyka">
+              <p className="kut-nadpis">Як звати малюка?</p>
               <input
                 id="imia"
                 type="text"
-                className="cloud-inner-input"
+                className="kulyka-vkhid"
                 value={imia}
                 maxLength={40}
                 placeholder="Введи ім'я..."
@@ -643,6 +643,20 @@ export default function App() {
                   setImia(e.target.value);
                 }}
               />
+            </div>
+
+            <svg className="kulyka-nitka" viewBox="0 0 140 160" aria-hidden="true">
+              <path
+                d="M71 2 C 76 45, 88 95, 96 126"
+                fill="none"
+                stroke="#F2D06B"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            <div className="brelok">
+              <span className="brelok-nitka" />
               <button
                 type="button"
                 className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
@@ -658,6 +672,40 @@ export default function App() {
                 {slukhae === "imia" ? "⏹" : "✨"}
               </button>
             </div>
+
+            <svg className="vedmedyk-svg" viewBox="0 0 200 250" aria-hidden="true">
+              <ellipse cx="62" cy="222" rx="32" ry="22" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <ellipse cx="138" cy="222" rx="32" ry="22" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <ellipse cx="58" cy="226" rx="16" ry="11" fill="#E9C79B" />
+              <ellipse cx="142" cy="226" rx="16" ry="11" fill="#E9C79B" />
+              <ellipse cx="100" cy="160" rx="56" ry="62" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <ellipse cx="100" cy="170" rx="37" ry="43" fill="#E9C79B" />
+              <path d="M100 134 L100 208" stroke="#C89B6E" strokeWidth="3" strokeDasharray="6 7" strokeLinecap="round" />
+              <ellipse cx="160" cy="152" rx="17" ry="30" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(18 160 152)" />
+              <ellipse cx="140" cy="115" rx="18" ry="36" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(40 140 115)" />
+              <circle cx="163" cy="87" r="15" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <circle cx="55" cy="30" r="20" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <circle cx="145" cy="30" r="20" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <circle cx="55" cy="30" r="10" fill="#E9C79B" />
+              <circle cx="145" cy="30" r="10" fill="#E9C79B" />
+              <circle cx="100" cy="70" r="52" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
+              <ellipse cx="100" cy="90" rx="26" ry="19" fill="#EFD3AC" />
+              <ellipse cx="64" cy="88" rx="9" ry="6" fill="#F4A9A2" opacity="0.6" />
+              <ellipse cx="136" cy="88" rx="9" ry="6" fill="#F4A9A2" opacity="0.6" />
+              <ellipse cx="100" cy="82" rx="8" ry="6" fill="#4A3426" />
+              <path
+                d="M100 88 L100 95 M100 95 q-9 8 -16 1 M100 95 q9 8 16 1"
+                stroke="#4A3426"
+                strokeWidth="3"
+                fill="none"
+                strokeLinecap="round"
+              />
+              <circle cx="80" cy="62" r="7" fill="#3B2A20" />
+              <circle cx="120" cy="62" r="7" fill="#3B2A20" />
+              <circle cx="82.5" cy="59.5" r="2.5" fill="#FFFFFF" />
+              <circle cx="122.5" cy="59.5" r="2.5" fill="#FFFFFF" />
+            </svg>
+
             <p className="holos-pidkazka" role="status">
               {slukhae
                 ? "Слухаю… говори, потім натисни ⏹"
