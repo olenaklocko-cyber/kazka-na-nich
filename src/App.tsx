@@ -819,9 +819,11 @@ export default function App() {
             )}
           </section>
 
-          {/* Сувій Уроку — нижній правий кут */}
+          {/* Чарівна закрита книжечка — нижній правий кут */}
           <div className="kut-suvij-uroku">
-            <p className="kut-nadpis">Повчальний урок:</p>
+            <span className="kniga-ramka" aria-hidden="true" />
+            <span className="kniga-zakladka" aria-hidden="true" />
+            <p className="kut-nadpis">Чому навчить казка?</p>
             <div className="khmara-imia">
               <input
                 id="urok"
@@ -843,7 +845,7 @@ export default function App() {
                 className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
                 disabled={limyt}
                 aria-label={
-                  slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
+                  slukhae === "urok" ? "Зупинити запис: тема казки" : "Сказати тему казки голосом"
                 }
                 aria-pressed={slukhae === "urok"}
                 onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}

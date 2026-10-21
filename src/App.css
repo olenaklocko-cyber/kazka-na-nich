@@ -2562,39 +2562,42 @@ body {
   }
 }
 
-/* Текст у книжечці — акуратний книжковий шрифт */
+/* Титул на обкладинці — великий дитячий заголовок */
 .kut-suvij-uroku .kut-nadpis {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: 16.5px;
-  color: #7c5a2e;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  font-weight: 800;
+  font-size: clamp(21px, 2vw, 27px);
+  color: #FFE9A8;
+  line-height: 1.15;
   letter-spacing: 0.3px;
   margin: 0;
+  text-shadow: 0 2px 0 rgba(6, 46, 41, 0.7), 0 0 20px rgba(252, 211, 77, 0.35);
 }
 
-/* Нижній правий кут — Магічна Книга-Нотатник */
+/* Нижній правий кут — чарівна ЗАКРИТА дитяча книжечка з об'ємною обкладинкою */
 .kut-suvij-uroku {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 84px;
+  right: 14px;
   z-index: 5;
-  width: min(340px, 31%);
-  background:
-    linear-gradient(90deg, rgba(230, 210, 170, 0.55) 0%, rgba(253, 246, 226, 0) 14%),
-    linear-gradient(180deg, #fffdf5 0%, #fdf6e2 45%, #f7edd6 100%);
+  box-sizing: border-box;
+  width: min(360px, 34%);
+  min-height: 258px;
+  background: linear-gradient(155deg, #17917F 0%, #0E7466 48%, #0A5A4F 100%);
   border: none;
-  border-radius: 8px 16px 16px 8px / 8px 14px 14px 8px;
+  border-radius: 10px 18px 18px 10px / 10px 16px 16px 10px;
   box-shadow:
-    0 18px 36px rgba(0, 0, 0, 0.42),
-    0 4px 10px rgba(0, 0, 0, 0.25),
-    inset 0 -10px 18px rgba(160, 120, 50, 0.14),
-    inset 0 3px 6px rgba(255, 255, 255, 0.9);
-  padding: 16px 18px 16px 30px;
+    0 26px 50px rgba(0, 0, 0, 0.5),
+    0 8px 16px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.14),
+    inset -8px -10px 24px rgba(0, 0, 0, 0.3),
+    inset 8px 10px 22px rgba(255, 255, 255, 0.1);
+  padding: 26px 26px 24px 56px;
   transform: rotate(-5deg);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: center;
+  gap: 14px;
   transition: transform 0.3s ease;
 }
 
@@ -2602,38 +2605,37 @@ body {
   transform: rotate(-5deg) scale(1.03);
 }
 
-/* Корінець розгорнутої книжечки */
-.kut-suvij-uroku::after {
-  content: "";
-  position: absolute;
-  left: 15px;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 3px;
-  background: linear-gradient(
-    180deg,
-    rgba(160, 120, 50, 0.05),
-    rgba(160, 120, 50, 0.4),
-    rgba(160, 120, 50, 0.05)
-  );
-  pointer-events: none;
-}
-
-/* Легка текстура пергаменту */
+/* Корінець твердої книжки з золотими смужками */
 .kut-suvij-uroku::before {
   content: "";
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  border-radius: 10px 0 0 10px;
+  background:
+    linear-gradient(#F2C14E, #F2C14E) 0 54px / 100% 3px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) 0 calc(100% - 54px) / 100% 3px no-repeat,
+    linear-gradient(90deg, #063E37 0%, #0B5D51 55%, rgba(4, 40, 35, 0.9) 100%);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.14),
+    inset -3px 0 7px rgba(0, 0, 0, 0.35);
   pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 24px,
-    rgba(160, 120, 50, 0.07) 24px,
-    rgba(160, 120, 50, 0.07) 25px
-  );
-  border-radius: 8px 16px 16px 8px / 8px 14px 14px 8px;
+}
+
+/* Сторінки закритої книжки, що визирають праворуч */
+.kut-suvij-uroku::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 8px;
+  bottom: 8px;
+  width: 15px;
+  border-radius: 0 7px 7px 0;
+  background: repeating-linear-gradient(180deg, #FFFDF3 0 3px, #EFE4C6 3px 5px);
+  box-shadow: 5px 7px 14px rgba(0, 0, 0, 0.45), inset -3px 0 6px rgba(160, 120, 50, 0.28);
+  pointer-events: none;
 }
 
 .kut-suvij-uroku > * {
@@ -2641,31 +2643,93 @@ body {
   z-index: 1;
 }
 
+/* Золота рамка-титул на обкладинці */
+.kut-suvij-uroku .kniga-ramka {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  left: 40px;
+  border: 2px solid rgba(242, 193, 78, 0.5);
+  border-radius: 6px 12px 12px 6px / 6px 10px 10px 6px;
+  pointer-events: none;
+}
+
+/* Червона закладка-ляссе, що грайливо звисає знизу книжки */
+.kut-suvij-uroku .kniga-zakladka {
+  position: absolute;
+  right: 52px;
+  bottom: -48px;
+  width: 20px;
+  height: 48px;
+  background: linear-gradient(180deg, #E05A4E 0%, #C43A32 65%, #9E2B2B 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  transform-origin: top center;
+  animation: zakladka-kachka 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes zakladka-kachka {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+/* Поле теми — акуратний бланк прямо на обкладинці */
 .kut-suvij-uroku .khmara-imia {
   width: 100%;
   max-width: none;
-  background: rgba(255, 255, 255, 0.35);
-  border: 1.5px dashed rgba(160, 120, 50, 0.4);
-  border-radius: 12px;
-  box-shadow: inset 0 2px 6px rgba(160, 120, 50, 0.12);
-  padding: 8px 10px 8px 16px;
-  margin-bottom: 0;
+  background: rgba(255, 253, 244, 0.95);
+  border: none;
+  border-radius: 30px;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.35),
+    inset 0 2px 5px rgba(160, 120, 50, 0.14);
+  padding: 9px 9px 9px 16px;
+  gap: 8px;
 }
 
 .kut-suvij-uroku .khmara-imia:focus-within {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(245, 158, 11, 0.7);
+  background: #ffffff;
+  box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.35),
+    0 0 0 3px rgba(252, 211, 77, 0.55);
 }
 
 .kut-suvij-uroku .khmara-imia-vkhid {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  font-style: normal;
   font-size: 15px;
-  color: #5b4630;
+  font-weight: 700;
+  color: #0A5A4F;
 }
 
 .kut-suvij-uroku .khmara-imia-vkhid::placeholder {
-  color: #b09a72;
+  color: #9DBDB4;
+}
+
+/* Друга чарівна зірочка-мікрофон на обкладинці */
+.kut-suvij-uroku .khmara-mikrofon-malyj {
+  width: 50px;
+  height: 50px;
+  font-size: 23px;
+}
+
+/* Вужчі екрани: книжка стає у стек під кнопкою, щоб не налазити на неї */
+@media (max-width: 1279px) {
+  .kut-suvij-uroku {
+    position: relative;
+    inset: auto;
+    width: min(360px, 100%);
+    max-width: 440px;
+    margin: 0 auto;
+    transform: none;
+    order: 0;
+  }
+
+  .kut-suvij-uroku:hover {
+    transform: scale(1.02);
+  }
 }
 
 /* Мобільний: кути стають звичайними блоками */
@@ -2683,6 +2747,11 @@ body {
     animation: none;
     transform: none;
     order: 0;
+  }
+
+  .kut-suvij-uroku {
+    position: relative;
+    inset: auto;
   }
 
   .kut-khmara-imia {
