@@ -603,7 +603,7 @@ export default function App() {
           <div className="khmara-imia name-input-container">
             <svg
               className="khmara-svg"
-              viewBox="0 0 1200 400"
+              viewBox="0 0 1200 420"
               preserveAspectRatio="none"
               aria-hidden="true"
             >
@@ -614,27 +614,27 @@ export default function App() {
                   <stop offset="100%" stopColor="#bfe0fa" />
                 </linearGradient>
                 <clipPath id="khmara-clip">
-                  <path d="M110 240 A95 85 0 0 1 300 240 A175 140 0 0 1 650 240 A145 115 0 0 1 940 240 A85 70 0 0 1 1090 250 Q1130 330 1050 345 Q980 395 900 350 Q830 390 750 348 Q675 395 590 350 Q515 392 430 348 Q355 390 275 350 Q200 385 150 340 Q90 300 110 240 Z" />
+                  <path d="M80 290 A130 120 0 0 1 350 232 A215 178 0 0 1 770 222 A155 135 0 0 1 1055 262 A85 80 0 0 1 1115 328 Q1065 388 965 356 Q865 405 762 360 Q662 410 560 364 Q460 405 358 358 Q258 395 172 352 Q98 328 80 290 Z" />
                 </clipPath>
               </defs>
               <path
-                d="M110 240 A95 85 0 0 1 300 240 A175 140 0 0 1 650 240 A145 115 0 0 1 940 240 A85 70 0 0 1 1090 250 Q1130 330 1050 345 Q980 395 900 350 Q830 390 750 348 Q675 395 590 350 Q515 392 430 348 Q355 390 275 350 Q200 385 150 340 Q90 300 110 240 Z"
+                d="M80 290 A130 120 0 0 1 350 232 A215 178 0 0 1 770 222 A155 135 0 0 1 1055 262 A85 80 0 0 1 1115 328 Q1065 388 965 356 Q865 405 762 360 Q662 410 560 364 Q460 405 358 358 Q258 395 172 352 Q98 328 80 290 Z"
                 fill="url(#khmara-grad)"
                 stroke="#5ba3e8"
-                strokeWidth="14"
+                strokeWidth="13"
                 strokeLinejoin="round"
               />
               <g clipPath="url(#khmara-clip)">
                 <ellipse
-                  cx="380"
-                  cy="165"
-                  rx="210"
-                  ry="72"
+                  cx="400"
+                  cy="180"
+                  rx="200"
+                  ry="68"
                   fill="#ffffff"
                   opacity="0.85"
-                  transform="rotate(-10 380 165)"
+                  transform="rotate(-8 400 180)"
                 />
-                <ellipse cx="780" cy="300" rx="230" ry="60" fill="#d8edfd" opacity="0.6" />
+                <ellipse cx="800" cy="310" rx="220" ry="55" fill="#d8edfd" opacity="0.6" />
               </g>
             </svg>
             <input
@@ -653,7 +653,7 @@ export default function App() {
             />
             <button
               type="button"
-              className={`star-microphone-btn ${slukhae === "imia" ? "khmara-mikrofon-zapys" : ""}`}
+              className={`khmara-mikrofon ${slukhae === "imia" ? "khmara-mikrofon-zapys" : ""}`}
               disabled={limyt}
               aria-label={
                 slukhae === "imia"
