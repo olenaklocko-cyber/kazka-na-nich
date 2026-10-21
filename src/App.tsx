@@ -359,7 +359,11 @@ export default function App() {
       }
     };
     rozPiznavanniaRef.current = roz;
-    roz.start();
+    try {
+      roz.start();
+    } catch {
+      setHolosPomylka("Не вдалося запустити мікрофон — спробуй ще раз");
+    }
   };
 
   const generuvaly = async (podium: "perehlyad" | "scheOdna" = "perehlyad") => {
@@ -659,26 +663,28 @@ export default function App() {
                 aria-pressed={slukhae === "imia"}
                 onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
               >
-                {slukhae === "imia" ? (
-                  <span className="brelok-symbol">⏹</span>
-                ) : (
-                  <svg className="brelok-symbol" viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="9" y="2.5" width="6" height="11" rx="3" fill="#4C1D95" />
-                    <path
-                      d="M6 11a6 6 0 0 0 12 0"
-                      fill="none"
-                      stroke="#4C1D95"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                    />
-                    <path
-                      d="M12 17v3.2M8.8 20.4h6.4"
-                      stroke="#4C1D95"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                )}
+                <span className="brelok-zirka">
+                  {slukhae === "imia" ? (
+                    <span className="brelok-symbol">⏹</span>
+                  ) : (
+                    <svg className="brelok-symbol" viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="9" y="2.5" width="6" height="11" rx="3" fill="#4C1D95" />
+                      <path
+                        d="M6 11a6 6 0 0 0 12 0"
+                        fill="none"
+                        stroke="#4C1D95"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M12 17v3.2M8.8 20.4h6.4"
+                        stroke="#4C1D95"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  )}
+                </span>
               </button>
             </div>
 
@@ -721,14 +727,11 @@ export default function App() {
               <ellipse cx="150" cy="106" rx="17" ry="30" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(20 150 106)" />
               <circle cx="160" cy="78" r="15" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
               <ellipse cx="158" cy="75" rx="8" ry="7" fill="#E9C79B" />
-              <ellipse cx="106" cy="118" rx="17" ry="40" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(66 106 118)" />
-              <circle cx="143" cy="101" r="14" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="142" cy="98" rx="7" ry="6.5" fill="#E9C79B" />
             </svg>
 
             <svg className="kulyka-nitka" viewBox="0 0 130 190" aria-hidden="true">
               <path
-                d="M30 7 C 58 55, 100 100, 103 148 C 104 165, 95 178, 76 185"
+                d="M30 7 C 60 55, 112 100, 123 158"
                 fill="none"
                 stroke="#F2D06B"
                 strokeWidth="3.5"
@@ -739,8 +742,6 @@ export default function App() {
             <svg className="vedmedyk-lapky" viewBox="0 0 200 250" aria-hidden="true">
               <circle cx="160" cy="78" r="15" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
               <ellipse cx="158" cy="75" rx="8" ry="7" fill="#E9C79B" />
-              <circle cx="143" cy="101" r="14" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="142" cy="98" rx="7" ry="6.5" fill="#E9C79B" />
             </svg>
 
             <p className="holos-pidkazka" role="status">
