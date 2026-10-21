@@ -318,10 +318,19 @@ export default function App() {
   const slukhaty = (pole: PoleHolosu, pryjnyaty: (tekst: string) => void) => {
     setHolosPomylka(null);
     if (slukhae === pole) {
-      rozPiznavanniaRef.current?.stop();
+      try {
+        rozPiznavanniaRef.current?.stop();
+      } catch {
+        /* сеанс уже завершено */
+      }
+      setSlukhae(null);
       return;
     }
-    rozPiznavanniaRef.current?.stop();
+    try {
+      rozPiznavanniaRef.current?.stop();
+    } catch {
+      /* попередній сеанс ще не запущено */
+    }
     const w = window as unknown as {
       SpeechRecognition?: new () => RozPiznavanniaHolosu;
       webkitSpeechRecognition?: new () => RozPiznavanniaHolosu;
@@ -359,9 +368,11 @@ export default function App() {
       }
     };
     rozPiznavanniaRef.current = roz;
+    setSlukhae(pole);
     try {
       roz.start();
     } catch {
+      setSlukhae(null);
       setHolosPomylka("Не вдалося запустити мікрофон — спробуй ще раз");
     }
   };
@@ -629,7 +640,7 @@ export default function App() {
             void generuvaly();
           }}
         >
-          {/* Верхній лівий кут — Плюшевий ведмедик із повітряною кулькою */}
+          {/* Верхній лівий кут — Ведмедик 🧸 і повітряна кулька */}
           <div className="kut-khmara-imia">
             <div className="kulyka">
               <p className="kut-nadpis">Як звати малюка?</p>
@@ -649,6 +660,16 @@ export default function App() {
               />
             </div>
 
+            <svg className="kulyka-nitka" viewBox="0 0 100 160" aria-hidden="true">
+              <path
+                d="M55 8 C 60 60, 58 110, 56 150"
+                fill="none"
+                stroke="#F2D06B"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </svg>
+
             <div className="brelok">
               <span className="brelok-nitka" />
               <button
@@ -663,91 +684,18 @@ export default function App() {
                 aria-pressed={slukhae === "imia"}
                 onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
               >
-                <span className="brelok-zirka">
-                  {slukhae === "imia" ? (
-                    <span className="brelok-symbol">⏹</span>
-                  ) : (
-                    <svg className="brelok-symbol" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="9" y="2.5" width="6" height="11" rx="3" fill="#4C1D95" />
-                      <path
-                        d="M6 11a6 6 0 0 0 12 0"
-                        fill="none"
-                        stroke="#4C1D95"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                      />
-                      <path
-                        d="M12 17v3.2M8.8 20.4h6.4"
-                        stroke="#4C1D95"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  )}
-                </span>
+                {slukhae === "imia" ? "⏹" : "🎤"}
               </button>
             </div>
 
-            <svg className="vedmedyk-svg" viewBox="0 0 200 250" aria-hidden="true">
-              <ellipse cx="62" cy="222" rx="32" ry="22" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="138" cy="222" rx="32" ry="22" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="58" cy="226" rx="16" ry="11" fill="#E9C79B" />
-              <ellipse cx="142" cy="226" rx="16" ry="11" fill="#E9C79B" />
-              <ellipse cx="100" cy="160" rx="56" ry="62" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="100" cy="170" rx="37" ry="43" fill="#E9C79B" />
-              <path
-                d="M100 134 L100 208"
-                stroke="#C89B6E"
-                strokeWidth="3"
-                strokeDasharray="6 7"
-                strokeLinecap="round"
-              />
-              <ellipse cx="160" cy="160" rx="17" ry="30" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(20 160 160)" />
-              <circle cx="55" cy="30" r="20" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <circle cx="145" cy="30" r="20" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <circle cx="55" cy="30" r="10" fill="#E9C79B" />
-              <circle cx="145" cy="30" r="10" fill="#E9C79B" />
-              <circle cx="100" cy="70" r="52" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="100" cy="90" rx="26" ry="19" fill="#EFD3AC" />
-              <ellipse cx="64" cy="88" rx="9" ry="6" fill="#F4A9A2" opacity="0.6" />
-              <ellipse cx="136" cy="88" rx="9" ry="6" fill="#F4A9A2" opacity="0.6" />
-              <ellipse cx="100" cy="82" rx="8" ry="6" fill="#4A3426" />
-              <path
-                d="M100 88 L100 95 M100 95 q-9 8 -16 1 M100 95 q9 8 16 1"
-                stroke="#4A3426"
-                strokeWidth="3"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <circle cx="80" cy="62" r="7" fill="#3B2A20" />
-              <circle cx="120" cy="62" r="7" fill="#3B2A20" />
-              <circle cx="82.5" cy="59.5" r="2.5" fill="#FFFFFF" />
-              <circle cx="122.5" cy="59.5" r="2.5" fill="#FFFFFF" />
-              {/* Обидві верхні лапки міцно тримають ниточку */}
-              <ellipse cx="150" cy="106" rx="17" ry="30" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" transform="rotate(20 150 106)" />
-              <circle cx="160" cy="78" r="15" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="158" cy="75" rx="8" ry="7" fill="#E9C79B" />
-            </svg>
-
-            <svg className="kulyka-nitka" viewBox="0 0 130 190" aria-hidden="true">
-              <path
-                d="M30 7 C 60 55, 112 100, 123 158"
-                fill="none"
-                stroke="#F2D06B"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-            </svg>
-
-            <svg className="vedmedyk-lapky" viewBox="0 0 200 250" aria-hidden="true">
-              <circle cx="160" cy="78" r="15" fill="#B5815A" stroke="#8A5B36" strokeWidth="3" />
-              <ellipse cx="158" cy="75" rx="8" ry="7" fill="#E9C79B" />
-            </svg>
+            <span className="vedmedyk-ikona" aria-hidden="true">
+              🧸
+            </span>
 
             <p className="holos-pidkazka" role="status">
               {slukhae
                 ? "Слухаю… говори, потім натисни ⏹"
-                : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ і скажи голосом")}
+                : (holosPomylka ?? "Не вмієш друкувати? Натисни 🎤 і скажи голосом")}
             </p>
           </div>
 
