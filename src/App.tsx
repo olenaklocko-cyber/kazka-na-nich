@@ -603,74 +603,38 @@ export default function App() {
           <div className="khmara-imia name-input-container">
             <svg
               className="khmara-svg"
-              viewBox="0 0 1040 200"
+              viewBox="0 0 1200 400"
               preserveAspectRatio="none"
               aria-hidden="true"
             >
               <defs>
-                {/* Goo-фільтр зливає кульки в одну пухку хмару */}
-                <filter id="khmara-goo">
-                  <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
-                  <feColorMatrix
-                    in="blur"
-                    mode="matrix"
-                    values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10"
-                  />
-                </filter>
+                <linearGradient id="khmara-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="50%" stopColor="#edf6fe" />
+                  <stop offset="100%" stopColor="#bfe0fa" />
+                </linearGradient>
+                <clipPath id="khmara-clip">
+                  <path d="M110 240 A95 85 0 0 1 300 240 A175 140 0 0 1 650 240 A145 115 0 0 1 940 240 A85 70 0 0 1 1090 250 Q1130 330 1050 345 Q980 395 900 350 Q830 390 750 348 Q675 395 590 350 Q515 392 430 348 Q355 390 275 350 Q200 385 150 340 Q90 300 110 240 Z" />
+                </clipPath>
               </defs>
-              {/* Блакитний контур — ті самі кульки, трохи більші */}
-              <g filter="url(#khmara-goo)" fill="#6ec6f5">
-                <circle cx="80" cy="125" r="50" />
-                <circle cx="180" cy="85" r="66" />
-                <circle cx="320" cy="75" r="78" />
-                <circle cx="470" cy="82" r="72" />
-                <circle cx="620" cy="72" r="80" />
-                <circle cx="770" cy="88" r="68" />
-                <circle cx="900" cy="105" r="56" />
-                <circle cx="980" cy="125" r="46" />
-                <circle cx="150" cy="158" r="38" />
-                <circle cx="280" cy="162" r="42" />
-                <circle cx="420" cy="164" r="44" />
-                <circle cx="560" cy="164" r="44" />
-                <circle cx="700" cy="162" r="42" />
-                <circle cx="840" cy="158" r="38" />
-                <circle cx="300" cy="128" r="62" />
-                <circle cx="500" cy="124" r="66" />
-                <circle cx="700" cy="128" r="62" />
-                <circle cx="850" cy="134" r="52" />
-              </g>
-              {/* Біле тіло хмари */}
-              <g filter="url(#khmara-goo)" fill="#ffffff">
-                <circle cx="80" cy="125" r="42" />
-                <circle cx="180" cy="85" r="58" />
-                <circle cx="320" cy="75" r="70" />
-                <circle cx="470" cy="82" r="64" />
-                <circle cx="620" cy="72" r="72" />
-                <circle cx="770" cy="88" r="60" />
-                <circle cx="900" cy="105" r="48" />
-                <circle cx="980" cy="125" r="38" />
-                <circle cx="150" cy="158" r="30" />
-                <circle cx="280" cy="162" r="34" />
-                <circle cx="420" cy="164" r="36" />
-                <circle cx="560" cy="164" r="36" />
-                <circle cx="700" cy="162" r="34" />
-                <circle cx="840" cy="158" r="30" />
-                <circle cx="300" cy="128" r="54" />
-                <circle cx="500" cy="124" r="58" />
-                <circle cx="700" cy="128" r="54" />
-                <circle cx="850" cy="134" r="44" />
-              </g>
-              {/* Блискітки, як на мультяшці */}
-              <g fill="#e8f4fd" opacity="0.95">
-                <ellipse cx="280" cy="48" rx="34" ry="13" transform="rotate(-16 280 48)" />
-                <ellipse cx="600" cy="42" rx="38" ry="14" transform="rotate(-12 600 42)" />
-                <ellipse cx="820" cy="70" rx="20" ry="8" transform="rotate(-20 820 70)" />
-              </g>
-              {/* Ніжно-блакитні складочки-усмішки */}
-              <g fill="none" stroke="#5aade8" strokeWidth="6" strokeLinecap="round" opacity="0.7">
-                <path d="M 200 130 q 40 22 80 0" />
-                <path d="M 460 122 q 46 26 92 0" />
-                <path d="M 720 126 q 36 20 72 0" />
+              <path
+                d="M110 240 A95 85 0 0 1 300 240 A175 140 0 0 1 650 240 A145 115 0 0 1 940 240 A85 70 0 0 1 1090 250 Q1130 330 1050 345 Q980 395 900 350 Q830 390 750 348 Q675 395 590 350 Q515 392 430 348 Q355 390 275 350 Q200 385 150 340 Q90 300 110 240 Z"
+                fill="url(#khmara-grad)"
+                stroke="#5ba3e8"
+                strokeWidth="14"
+                strokeLinejoin="round"
+              />
+              <g clipPath="url(#khmara-clip)">
+                <ellipse
+                  cx="380"
+                  cy="165"
+                  rx="210"
+                  ry="72"
+                  fill="#ffffff"
+                  opacity="0.85"
+                  transform="rotate(-10 380 165)"
+                />
+                <ellipse cx="780" cy="300" rx="230" ry="60" fill="#d8edfd" opacity="0.6" />
               </g>
             </svg>
             <input
