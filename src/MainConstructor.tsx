@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 interface Vlastyvosti {
   children: ReactNode;
+  /** Напівпрозорий вміст футера (мова, лічильник тощо) */
+  dodatokNyzh?: ReactNode;
   pro: boolean;
   dataPro: string;
   tema: "nich" | "den";
@@ -14,6 +16,7 @@ interface Vlastyvosti {
 /** Головний робочий екран — конструктор казок на магічному нічному небі. */
 export default function MainConstructor({
   children,
+  dodatokNyzh,
   pro,
   dataPro,
   tema,
@@ -49,6 +52,7 @@ export default function MainConstructor({
 
       {/* Технічні кнопки — унизу, непомітні */}
       <footer className="chytka-pidval">
+        {dodatokNyzh}
         {pro ? (
           <span className="pro-beydzh" role="status">
             ✨ Pro{dataPro ? ` до ${dataPro}` : ""}

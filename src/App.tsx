@@ -585,97 +585,8 @@ export default function App() {
           setVidhukTekst("");
         }}
         onNastroiky={vidkrytyNastroiky}
-      >
-      <main className="chytka-forma-tilo">
-        <form
-          className="chytka-dvir"
-          onSubmit={(e) => {
-            e.preventDefault();
-            void generuvaly();
-          }}
-        >
-          {/* ЛІВА ЗОНА — Чарівний Сувій (введення даних) */}
-          <section className="chytka-suvij" aria-label="Введення даних казки">
-            {pomylka && (
-              <p className="pomylka" role="alert">
-                {pomylka}
-              </p>
-            )}
-
-            <h2 className="suvij-zagolovok">✨ Як звати нашого маленького героя?</h2>
-
-            <div className="magic-cloud-input">
-              <input
-                id="imia"
-                type="text"
-                className="cloud-inner-input"
-                value={imia}
-                maxLength={40}
-                placeholder="Введи ім'я..."
-                autoComplete="off"
-                disabled={limyt}
-                onChange={(e) => {
-                  formStart();
-                  setImia(e.target.value);
-                }}
-              />
-              <button
-                type="button"
-                className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
-                disabled={limyt}
-                aria-label={
-                  slukhae === "imia"
-                    ? "Зупинити запис: ім'я дитини"
-                    : "Сказати ім'я дитини голосом"
-                }
-                aria-pressed={slukhae === "imia"}
-                onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
-              >
-                {slukhae === "imia" ? "⏹" : "✨"}
-              </button>
-            </div>
-
-            <div className="khmara-imia khmara-mensha">
-              <input
-                id="urok"
-                type="text"
-                className="khmara-imia-vkhid"
-                value={urok}
-                list="spysok-urokiv"
-                maxLength={80}
-                placeholder="Повчальний урок: чому чистити зуби?"
-                autoComplete="off"
-                disabled={limyt}
-                onChange={(e) => {
-                  formStart();
-                  setUrok(e.target.value);
-                }}
-              />
-              <button
-                type="button"
-                className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
-                disabled={limyt}
-                aria-label={
-                  slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
-                }
-                aria-pressed={slukhae === "urok"}
-                onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
-              >
-                {slukhae === "urok" ? "⏹" : "✨"}
-              </button>
-            </div>
-            <datalist id="spysok-urokiv">
-              {UROKY.map((u) => (
-                <option key={u} value={u} />
-              ))}
-            </datalist>
-
-            <p className="holos-pidkazka" role="status">
-              {slukhae
-                ? "Слухаю… говори, потім натисни ⏹"
-                : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ біля поля і скажи голосом")}
-            </p>
-
+        dodatokNyzh={
+          <>
             <div className="mova-khrugly" role="radiogroup" aria-label="Мова казки">
               <label className={`mova-pilyuka ${mova === "uk" ? "mova-pilyuka-aktyvna" : ""}`}>
                 <input
@@ -685,7 +596,7 @@ export default function App() {
                   disabled={limyt}
                   onChange={() => setMova("uk")}
                 />
-                🇺🇦 Українська
+                🇺🇦 Укр
               </label>
               <label className={`mova-pilyuka ${mova === "en" ? "mova-pilyuka-aktyvna" : ""}`}>
                 <input
@@ -695,38 +606,108 @@ export default function App() {
                   disabled={limyt}
                   onChange={() => setMova("en")}
                 />
-                🇬🇧 English
+                🇬🇧 Eng
               </label>
             </div>
+            <p className="chytka-luchyk" role="status">
+              {pro
+                ? `✨ Pro активовано${dataPro ? ` до ${dataPro}` : ""} — безліміт казок`
+                : `Безкоштовних казок лишилось: ${stan ? stan.lyshylosya : "…"} з ${stan?.limit ?? 3}`}
+            </p>
+          </>
+        }
+      >
+      <main className="chytka-forma-tilo">
+        <form
+          className="chytka-dvir"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void generuvaly();
+          }}
+        >
+          {/* ЛІВА ЗОНА — Чарівна Книга Нотаток */}
+          <section className="chytka-leva-zona" aria-label="Введення даних казки">
+            <div className="chytka-knyha">
+              {pomylka && (
+                <p className="pomylka" role="alert">
+                  {pomylka}
+                </p>
+              )}
 
-            <button
-              type="submit"
-              className="zirka-knopka"
-              disabled={zavantazhennya || limyt || !formaZapovnena}
-            >
-              {zavantazhennya
-                ? "✨ Вигадую казку…"
-                : variantAB() === "A"
-                  ? "✨ Створити казку"
-                  : "🌙 Казка за 10 секунд"}
-            </button>
+              <h2 className="knyha-nadpis">Як звати малюка?</h2>
+              <div className="magic-cloud-input">
+                <input
+                  id="imia"
+                  type="text"
+                  className="cloud-inner-input"
+                  value={imia}
+                  maxLength={40}
+                  placeholder="Введи ім'я..."
+                  autoComplete="off"
+                  disabled={limyt}
+                  onChange={(e) => {
+                    formStart();
+                    setImia(e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  className={`star-mic-btn ${slukhae === "imia" ? "star-mic-btn-zapys" : ""}`}
+                  disabled={limyt}
+                  aria-label={
+                    slukhae === "imia"
+                      ? "Зупинити запис: ім'я дитини"
+                      : "Сказати ім'я дитини голосом"
+                  }
+                  aria-pressed={slukhae === "imia"}
+                  onClick={() => slukhaty("imia", (t) => setImia((p) => (p ? `${p} ` : "") + t))}
+                >
+                  {slukhae === "imia" ? "⏹" : "✨"}
+                </button>
+              </div>
 
-            {zavantazhennya && (
-              <p className="generuvalno" role="status">
-                ✨ Генерую казку… це займе близько 10 секунд
-              </p>
-            )}
+              <h2 className="knyha-nadpis">Повчальний урок</h2>
+              <div className="khmara-imia khmara-mensha">
+                <input
+                  id="urok"
+                  type="text"
+                  className="khmara-imia-vkhid"
+                  value={urok}
+                  list="spysok-urokiv"
+                  maxLength={80}
+                  placeholder="Чому чистити зуби?"
+                  autoComplete="off"
+                  disabled={limyt}
+                  onChange={(e) => {
+                    formStart();
+                    setUrok(e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
+                  disabled={limyt}
+                  aria-label={
+                    slukhae === "urok" ? "Зупинити запис: повчальний урок" : "Сказати урок голосом"
+                  }
+                  aria-pressed={slukhae === "urok"}
+                  onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
+                >
+                  {slukhae === "urok" ? "⏹" : "✨"}
+                </button>
+              </div>
+              <datalist id="spysok-urokiv">
+                {UROKY.map((u) => (
+                  <option key={u} value={u} />
+                ))}
+              </datalist>
+            </div>
 
-            {pro ? (
-              <p className="lichylnyk" role="status">
-                ✨ Pro активно{dataPro ? ` до ${dataPro}` : ""} — безліміт казок
-              </p>
-            ) : (
-              <p className="lichylnyk" role="status">
-                Безкоштовних казок лишилось: {stan ? stan.lyshylosya : "…"} з{" "}
-                {stan?.limit ?? 3}
-              </p>
-            )}
+            <p className="holos-pidkazka" role="status">
+              {slukhae
+                ? "Слухаю… говори, потім натисни ⏹"
+                : (holosPomylka ?? "Не вмієш друкувати? Натисни ✨ і скажи голосом")}
+            </p>
 
             {limyt && (
               <div className="limyt-khmara" role="status">
@@ -822,6 +803,25 @@ export default function App() {
                 <option key={h} value={h} />
               ))}
             </datalist>
+
+            {/* Фінальний акорд — по центру під героями */}
+            <button
+              type="submit"
+              className="zirka-knopka"
+              disabled={zavantazhennya || limyt || !formaZapovnena}
+            >
+              {zavantazhennya
+                ? "✨ Вигадую казку…"
+                : variantAB() === "A"
+                  ? "✨ Створити казку"
+                  : "🌙 Казка за 10 секунд"}
+            </button>
+
+            {zavantazhennya && (
+              <p className="generuvalno" role="status">
+                ✨ Генерую казку… це займе близько 10 секунд
+              </p>
+            )}
           </section>
         </form>
 
