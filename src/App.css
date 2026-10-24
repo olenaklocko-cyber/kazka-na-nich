@@ -2566,7 +2566,7 @@ body {
 .kut-suvij-uroku .kut-nadpis {
   font-family: "Comfortaa", ui-rounded, sans-serif;
   font-weight: 800;
-  font-size: clamp(19px, 1.8vw, 24px);
+  font-size: clamp(23px, 2.2vw, 29px);
   line-height: 1.2;
   letter-spacing: 0.3px;
   margin: 0;
@@ -2593,8 +2593,8 @@ body {
   right: 14px;
   z-index: 5;
   box-sizing: border-box;
-  width: min(252px, 26%);
-  min-height: 348px;
+  width: min(292px, 27%);
+  min-height: 440px;
   background:
     linear-gradient(125deg, transparent 20%, rgba(255, 255, 255, 0.3) 34%, rgba(255, 255, 255, 0.1) 42%, transparent 52%),
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
@@ -2752,25 +2752,6 @@ body {
   font-size: 9px;
 }
 
-/* 3D-перо — лежить на верхньому кутку обкладинки */
-.kut-suvij-uroku .kniga-pero {
-  position: absolute;
-  top: -8px;
-  right: -20px;
-  width: 76px;
-  height: 76px;
-  z-index: 2;
-  transform-origin: 68% 22%;
-  animation: pero-kachka 4.5s ease-in-out infinite;
-  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
-  pointer-events: none;
-}
-
-@keyframes pero-kachka {
-  0%, 100% { transform: rotate(12deg); }
-  50% { transform: rotate(22deg); }
-}
-
 /* Магічні іскри, що вилітають із книжки — ШІ генерує казку */
 .kut-suvij-uroku .kniga-isky {
   position: absolute;
@@ -2814,8 +2795,8 @@ body {
   box-shadow:
     0 5px 14px rgba(0, 0, 0, 0.35),
     inset 0 2px 5px rgba(160, 120, 50, 0.14);
-  padding: 8px 8px 8px 14px;
-  gap: 6px;
+  padding: 10px 10px 10px 16px;
+  gap: 8px;
 }
 
 .kut-suvij-uroku .khmara-imia:focus-within {
@@ -2828,7 +2809,7 @@ body {
 .kut-suvij-uroku .khmara-imia-vkhid {
   font-family: "Comfortaa", ui-rounded, sans-serif;
   font-style: normal;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #24348F;
 }
@@ -2839,9 +2820,9 @@ body {
 
 /* Справжній мікрофон на обкладинці — чітка іконка на пурпуровому кружечку */
 .kut-suvij-uroku .khmara-mikrofon-malyj {
-  width: 42px;
-  height: 42px;
-  font-size: 20px;
+  width: 46px;
+  height: 46px;
+  font-size: 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2884,13 +2865,20 @@ body {
   }
 }
 
+/* 1280–1439: зліва впритул до Динозаврика — тримаємо ширину, зростає висота */
+@media (max-width: 1439px) {
+  .kut-suvij-uroku {
+    width: min(252px, 26%);
+  }
+}
+
 /* Вужчі екрани: книжка стає у стек під кнопкою, щоб не налазити на неї */
 @media (max-width: 1279px) {
   .kut-suvij-uroku {
     position: relative;
     inset: auto;
-    width: min(252px, 100%);
-    max-width: 280px;
+    width: min(292px, 100%);
+    max-width: 320px;
     margin: 0 auto;
     transform: none;
     order: 0;
