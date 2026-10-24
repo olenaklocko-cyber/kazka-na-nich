@@ -822,6 +822,8 @@ export default function App() {
           {/* Чарівна закрита книжечка — нижній правий кут */}
           <div className="kut-suvij-uroku">
             <span className="kniga-ramka" aria-hidden="true" />
+            <span className="kniga-kutochky" aria-hidden="true" />
+            <span className="kniga-zirky" aria-hidden="true" />
             <span className="kniga-zakladka" aria-hidden="true" />
             <p className="kut-nadpis">Чому навчить казка?</p>
             <div className="khmara-imia">
