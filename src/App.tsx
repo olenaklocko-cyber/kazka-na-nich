@@ -94,7 +94,6 @@ export default function App() {
   const [stan, setStan] = useState<Stan | null>(null);
   const [ohovorytysya, setOhovorytysya] = useState(false);
   const [profilHolosu, setProfilHolosu] = useState<ProfilHolosu>("mama");
-  const [holosSystemu, setHolosSystemu] = useState("");
   const [holosy, setHolosy] = useState<SpeechSynthesisVoice[]>([]);
   const rezultatRef = useRef<HTMLHeadingElement>(null);
 
@@ -452,9 +451,7 @@ export default function App() {
     utterance.lang = mova === "uk" ? "uk-UA" : "en-US";
     utterance.rate = prof.rate;
     utterance.pitch = prof.pitch;
-    const vybranyj = holosSystemu
-      ? holosy.find((v) => v.voiceURI === holosSystemu)
-      : holosy.find((v) => v.lang.toLowerCase().startsWith("uk"));
+    const vybranyj = holosy.find((v) => v.lang.toLowerCase().startsWith("uk"));
     if (vybranyj) utterance.voice = vybranyj;
     utterance.onend = () => setOhovorytysya(false);
     utterance.onerror = () => setOhovorytysya(false);
@@ -915,13 +912,6 @@ export default function App() {
           mova={mova}
           ohovorytysya={ohovorytysya}
           profil={profilHolosu}
-          holosSystemu={holosSystemu}
-          holosy={holosy}
-          nemaUkHolosu={
-            mova === "uk" &&
-            holosy.length > 0 &&
-            !holosy.some((v) => v.lang.toLowerCase().startsWith("uk"))
-          }
           zavantazhennya={zavantazhennya}
           limyt={limyt}
           zagolovokRef={rezultatRef}
@@ -937,7 +927,6 @@ export default function App() {
           onPrykynyty={prykynytyOzhuvannya}
           onScheOdna={() => void generuvaly("scheOdna")}
           onProfil={setProfilHolosu}
-          onHolos={setHolosSystemu}
         />
       )}
 

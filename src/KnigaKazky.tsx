@@ -16,9 +16,6 @@ interface Vlastyvosti {
   mova: "uk" | "en";
   ohovorytysya: boolean;
   profil: ProfilHolosu;
-  holosSystemu: string;
-  holosy: SpeechSynthesisVoice[];
-  nemaUkHolosu: boolean;
   zavantazhennya: boolean;
   limyt: boolean;
   zagolovokRef: RefObject<HTMLHeadingElement | null>;
@@ -28,7 +25,6 @@ interface Vlastyvosti {
   onPrykynyty: () => void;
   onScheOdna: () => void;
   onProfil: (p: ProfilHolosu) => void;
-  onHolos: (uri: string) => void;
 }
 
 export default function KnigaKazky({
@@ -37,9 +33,6 @@ export default function KnigaKazky({
   mova,
   ohovorytysya,
   profil,
-  holosSystemu,
-  holosy,
-  nemaUkHolosu,
   zavantazhennya,
   limyt,
   zagolovokRef,
@@ -49,7 +42,6 @@ export default function KnigaKazky({
   onPrykynyty,
   onScheOdna,
   onProfil,
-  onHolos,
 }: Vlastyvosti) {
   useEffect(() => {
     const naEsc = (e: KeyboardEvent) => {
@@ -117,9 +109,6 @@ export default function KnigaKazky({
             >
               🔄 Ще одна казка
             </button>
-            <button type="button" className="knopka knopka-druhynna" onClick={onZakryty}>
-              📕 Закрити книгу
-            </button>
           </div>
 
           <fieldset className="holos-panel knyha-holos">
@@ -137,27 +126,6 @@ export default function KnigaKazky({
                 </button>
               ))}
             </div>
-            <div className="holos-vybir">
-              <label htmlFor="knyha-holos">Системний голос</label>
-              <select
-                id="knyha-holos"
-                value={holosSystemu}
-                onChange={(e) => onHolos(e.target.value)}
-              >
-                <option value="">Автоматично (найкращий доступний)</option>
-                {holosy.map((v) => (
-                  <option key={v.voiceURI} value={v.voiceURI}>
-                    {v.name} — {v.lang}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {nemaUkHolosu && (
-              <p className="holos-warh" role="note">
-                ⚠️ Немає українського голосу — спробуй профіль «✨ Казковий» або
-                обери голос зі списку.
-              </p>
-            )}
           </fieldset>
         </section>
 
@@ -165,6 +133,11 @@ export default function KnigaKazky({
           <article className="kazka-tekst knyha-tekst" lang={mova === "uk" ? "uk" : "en"}>
             {kazka}
           </article>
+          <div className="knyha-kincya">
+            <button type="button" className="knopka knopka-zakryty-knihu" onClick={onZakryty}>
+              📕 Закрити книгу
+            </button>
+          </div>
         </section>
       </div>
     </div>
