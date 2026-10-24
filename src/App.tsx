@@ -852,7 +852,6 @@ export default function App() {
             <span className="kniga-isky" aria-hidden="true">
               <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
             </span>
-            <span className="kniga-zakladka" aria-hidden="true" />
             <p className="kut-nadpis">Чому навчить казка?</p>
             <div className="khmara-imia">
               <input

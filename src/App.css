@@ -2596,21 +2596,24 @@ body {
   width: min(252px, 26%);
   min-height: 348px;
   background:
+    linear-gradient(125deg, transparent 20%, rgba(255, 255, 255, 0.3) 34%, rgba(255, 255, 255, 0.1) 42%, transparent 52%),
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
     repeating-linear-gradient(-45deg, rgba(30, 50, 140, 0.07) 0 1px, transparent 1px 5px),
-    radial-gradient(ellipse 72% 52% at 30% 16%, rgba(255, 255, 255, 0.42), transparent 62%),
-    radial-gradient(ellipse 60% 40% at 78% 88%, rgba(60, 80, 200, 0.5), transparent 65%),
-    linear-gradient(155deg, #8FB0FF 0%, #5D7CF2 45%, #4459D8 100%);
+    radial-gradient(ellipse 80% 46% at 50% -6%, rgba(255, 255, 255, 0.5), transparent 68%),
+    radial-gradient(ellipse 72% 52% at 30% 16%, rgba(255, 255, 255, 0.35), transparent 62%),
+    radial-gradient(ellipse 65% 45% at 78% 90%, rgba(45, 62, 170, 0.55), transparent 68%),
+    linear-gradient(165deg, #A8C2FF 0%, #6D8BF5 42%, #4459D8 100%);
   border: none;
-  border-radius: 20px 30px 30px 20px / 18px 28px 28px 18px;
+  border-radius: 34px 46px 46px 34px / 32px 44px 44px 32px;
   box-shadow:
-    0 30px 60px rgba(0, 0, 0, 0.55),
-    0 12px 24px rgba(0, 0, 0, 0.4),
-    0 0 44px rgba(252, 211, 77, 0.16),
-    inset 0 2px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -14px 28px rgba(35, 50, 140, 0.5),
-    inset 14px 16px 32px rgba(255, 255, 255, 0.22),
-    inset -10px -12px 26px rgba(40, 55, 140, 0.35);
+    0 34px 66px rgba(0, 0, 0, 0.6),
+    0 14px 28px rgba(0, 0, 0, 0.45),
+    0 0 55px rgba(255, 190, 40, 0.45),
+    0 0 110px rgba(255, 190, 40, 0.22),
+    inset 0 6px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -18px 32px rgba(30, 45, 130, 0.55),
+    inset 20px 20px 40px rgba(255, 255, 255, 0.25),
+    inset -16px -18px 34px rgba(30, 45, 130, 0.42);
   padding: 30px 20px 26px 46px;
   transform: rotate(-5deg);
   display: flex;
@@ -2632,7 +2635,7 @@ body {
   top: 0;
   bottom: 0;
   width: 32px;
-  border-radius: 18px 0 0 18px / 16px 0 0 16px;
+  border-radius: 30px 0 0 30px / 28px 0 0 28px;
   background:
     linear-gradient(#F2C14E, #F2C14E) 0 54px / 100% 3px no-repeat,
     linear-gradient(#F2C14E, #F2C14E) 0 calc(100% - 54px) / 100% 3px no-repeat,
@@ -2648,10 +2651,10 @@ body {
   content: "";
   position: absolute;
   right: -10px;
-  top: 8px;
-  bottom: 8px;
-  width: 15px;
-  border-radius: 0 14px 14px 0 / 0 12px 12px 0;
+  top: 26px;
+  bottom: 26px;
+  width: 16px;
+  border-radius: 0 22px 22px 0 / 0 20px 20px 0;
   background: repeating-linear-gradient(180deg, #FFFDF3 0 3px, #EFE4C6 3px 5px);
   box-shadow: 5px 7px 14px rgba(0, 0, 0, 0.45), inset -3px 0 6px rgba(160, 120, 50, 0.28);
   pointer-events: none;
@@ -2670,7 +2673,7 @@ body {
   bottom: 10px;
   left: 36px;
   border: 1.5px solid transparent;
-  border-radius: 14px 24px 24px 14px / 12px 22px 22px 12px;
+  border-radius: 28px 36px 36px 28px / 26px 34px 34px 26px;
   background: linear-gradient(110deg, rgba(242, 193, 78, 0.9), rgba(255, 243, 196, 0.95), rgba(242, 193, 78, 0.9)) border-box;
   background-size: 250% 100%;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
@@ -2689,16 +2692,16 @@ body {
   right: 15px;
   bottom: 15px;
   left: 41px;
-  border-radius: 12px 20px 20px 12px / 10px 18px 18px 10px;
+  border-radius: 24px 32px 32px 24px / 22px 30px 30px 22px;
   background:
-    linear-gradient(#F2C14E, #F2C14E) left top / 24px 2.5px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) left top / 2.5px 24px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) right top / 24px 2.5px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) right top / 2.5px 24px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) left bottom / 24px 2.5px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) left bottom / 2.5px 24px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) right bottom / 24px 2.5px no-repeat,
-    linear-gradient(#F2C14E, #F2C14E) right bottom / 2.5px 24px no-repeat;
+    linear-gradient(#F2C14E, #F2C14E) 10px 10px / 24px 2.5px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) 10px 10px / 2.5px 24px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) right 10px top 10px / 24px 2.5px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) right 10px top 10px / 2.5px 24px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) left 10px bottom 10px / 24px 2.5px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) left 10px bottom 10px / 2.5px 24px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) right 10px bottom 10px / 24px 2.5px no-repeat,
+    linear-gradient(#F2C14E, #F2C14E) right 10px bottom 10px / 2.5px 24px no-repeat;
   filter: drop-shadow(0 0 4px rgba(242, 193, 78, 0.45));
   pointer-events: none;
 }
@@ -2801,26 +2804,6 @@ body {
   100% { transform: translateY(-44px) scale(1.1); opacity: 0; }
 }
 
-/* Червона закладка-ляссе, що грайливо звисає знизу книжки */
-.kut-suvij-uroku .kniga-zakladka {
-  position: absolute;
-  right: 40px;
-  bottom: -48px;
-  width: 20px;
-  height: 48px;
-  background: linear-gradient(180deg, #E05A4E 0%, #C43A32 65%, #9E2B2B 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 72%, 0 100%);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  transform-origin: top center;
-  animation: zakladka-kachka 3.6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes zakladka-kachka {
-  0%, 100% { transform: rotate(-4deg); }
-  50% { transform: rotate(4deg); }
-}
-
 /* Поле теми — акуратний бланк прямо на обкладинці */
 .kut-suvij-uroku .khmara-imia {
   width: 100%;
@@ -2862,10 +2845,12 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 30% 28%, #8FA6FF 0%, #5572EE 55%, #3A4FC7 100%);
+  background: radial-gradient(circle at 32% 26%, #C3D1FF 0%, #7C9BFF 45%, #5572EE 75%, #3A4FC7 100%);
   color: #FFF3C4;
   border: 2px solid rgba(252, 211, 77, 0.65);
   box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -5px 9px rgba(30, 45, 130, 0.5),
     0 4px 14px rgba(0, 0, 0, 0.4),
     0 0 16px rgba(252, 211, 77, 0.35);
   animation: none;
