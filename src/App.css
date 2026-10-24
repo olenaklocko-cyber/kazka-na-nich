@@ -2084,6 +2084,9 @@ body {
 
 /* Ліва сторінка — чистий папірус без технічних меж */
 .knyha-lyeva {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
   min-width: 0;
   min-height: 0;
   padding: clamp(20px, 3vw, 34px) clamp(20px, 3vw, 34px) clamp(20px, 3vw, 34px) clamp(30px, 3.4vw, 44px);
@@ -2117,33 +2120,6 @@ body {
   margin: 0 0 16px;
 }
 
-.knyha-knopky {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.knopka-knyha {
-  width: 100%;
-  font-size: 16px;
-  font-weight: 700;
-  padding: 14px 18px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #a78bfa 0%, #7c4dff 100%);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(124, 77, 255, 0.35);
-}
-
-.knopka-knyha:hover {
-  transform: translateY(-2px);
-}
-
-.knopka-knyha-kazkovyi {
-  background: linear-gradient(135deg, #ffd76a 0%, #ff9d4d 100%);
-  color: #3a1e08;
-  box-shadow: 0 8px 20px rgba(255, 157, 77, 0.4);
-}
 
 /* Голос оповідача — м'яка врізка в папірус */
 .knyha-holos {
@@ -2193,7 +2169,9 @@ body {
 .knyha-kincya {
   flex-shrink: 0;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 14px;
   margin-top: 30px;
   padding-top: 22px;
   border-top: 1px dashed rgba(160, 120, 60, 0.4);
@@ -2212,6 +2190,25 @@ body {
 
 .knopka.knopka-zakryty-knihu:hover:not(:disabled) {
   box-shadow: 0 12px 26px rgba(255, 157, 77, 0.55);
+}
+
+.knopka-sche-odna {
+  min-height: 48px;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: rgba(53, 30, 102, 0.06);
+  border: 1.5px solid rgba(67, 39, 123, 0.5);
+  color: #43277b;
+}
+
+.knopka.knopka-sche-odna:hover:not(:disabled) {
+  background: rgba(53, 30, 102, 0.11);
+  border-color: rgba(67, 39, 123, 0.85);
+  box-shadow: 0 6px 14px rgba(53, 30, 102, 0.2);
+  transform: translateY(-2px);
+  filter: none;
 }
 
 /* ===== Ліва панель: єдина благородна гама замість веселки ===== */
@@ -2244,68 +2241,40 @@ body {
     0 2px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* Кнопки: глибокий магічний фіолет із золотим кантом */
-.knyha-knopky .knopka-knyha {
-  background: linear-gradient(160deg, #5b3a9e 0%, #43277b 55%, #351e66 100%);
-  border: 1.5px solid rgba(242, 193, 78, 0.55);
-  color: #ffeec2;
-  font-size: 15.5px;
-  padding: 13px 18px;
-  border-radius: 14px;
-  letter-spacing: 0.2px;
-  box-shadow:
-    0 6px 16px rgba(53, 30, 102, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-.knyha-knopky .knopka-knyha:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-color: rgba(252, 211, 77, 0.9);
-  box-shadow:
-    0 10px 22px rgba(53, 30, 102, 0.45),
-    0 0 18px rgba(252, 211, 77, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  filter: brightness(1.06);
-}
-
-/* Другорядна кнопка — тонка рамка в тій самій гамі */
-.knyha-knopky .knopka-druhynna {
-  background: rgba(53, 30, 102, 0.06);
-  border: 1.5px solid rgba(67, 39, 123, 0.5);
-  color: #43277b;
-}
-
-.knyha-knopky .knopka-druhynna:hover:not(:disabled) {
-  background: rgba(53, 30, 102, 0.11);
-  border-color: rgba(67, 39, 123, 0.85);
-  box-shadow: 0 6px 14px rgba(53, 30, 102, 0.2);
-  transform: translateY(-2px);
-  filter: none;
-}
-
-/* Панель голосів — м'яка, без грубих рамок */
-.knyha-holos {
+/* Блок озвучки — один аудіоблок на всю ліву сторінку */
+.knyha-ozvukka {
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(214, 169, 89, 0.45);
+  border-radius: 16px;
+  padding: 16px 14px 14px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.knyha-holos legend {
-  font-size: 11.5px;
+.knyha-ozvukka-zagolovok {
+  margin: 0 0 12px;
+  text-align: center;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
   font-weight: 800;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: #b08a3e;
-  padding: 0 8px;
+  font-size: clamp(17px, 1.6vw, 21px);
+  color: #43277b;
 }
 
-.knyha-holos .holos-chipy {
+.knyha-ozvukka-ryad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 14px;
+}
+
+.knyha-ozvukka .holos-chipy {
   justify-content: center;
   gap: 10px;
   margin-bottom: 0;
+  min-width: 0;
 }
 
-.knyha-holos .chip {
+.knyha-ozvukka .chip {
   min-height: 40px;
   padding: 7px 16px;
   font-size: 14px;
@@ -2316,13 +2285,13 @@ body {
   box-shadow: 0 2px 6px rgba(120, 90, 40, 0.12);
 }
 
-.knyha-holos .chip:hover {
+.knyha-ozvukka .chip:hover {
   color: #43277b;
   border-color: rgba(67, 39, 123, 0.55);
   box-shadow: 0 4px 10px rgba(67, 39, 123, 0.16);
 }
 
-.knyha-holos .chip-aktyvnyj {
+.knyha-ozvukka .chip-aktyvnyj {
   color: #ffeec2;
   background: linear-gradient(160deg, #5b3a9e 0%, #43277b 100%);
   border-color: rgba(242, 193, 78, 0.85);
@@ -2331,9 +2300,34 @@ body {
     0 0 14px rgba(252, 211, 77, 0.35);
 }
 
-.knyha-holos .chip-aktyvnyj:hover {
+.knyha-ozvukka .chip-aktyvnyj:hover {
   color: #ffeec2;
   border-color: rgba(252, 211, 77, 1);
+}
+
+/* Лаконічна кнопка Play / Stop поруч із вибором голосу */
+.kniga-play {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(242, 193, 78, 0.7);
+  border-radius: 50%;
+  font-size: 17px;
+  cursor: pointer;
+  background: linear-gradient(160deg, #5b3a9e 0%, #43277b 100%);
+  color: #ffeec2;
+  box-shadow:
+    0 4px 12px rgba(67, 39, 123, 0.35),
+    0 0 12px rgba(252, 211, 77, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.kniga-play:hover {
+  transform: scale(1.08);
+}
+
+.kniga-play-zapys {
+  animation: khmara-mikrofon-pulse 1.2s ease-in-out infinite;
 }
 
 /* Чарівний бігунок — золотий вказівник на паперовій колії */

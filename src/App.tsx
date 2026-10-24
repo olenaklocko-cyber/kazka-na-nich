@@ -916,17 +916,12 @@ export default function App() {
           limyt={limyt}
           zagolovokRef={rezultatRef}
           onZakryty={() => setKnyhaVidkrita(false)}
-          onChytatyMami={() => {
-            setProfilHolosu("mama");
-            ozhuyvaty("mama");
-          }}
-          onKazkovyiHolos={() => {
-            setProfilHolosu("charyvnyj");
-            ozhuyvaty("charyvnyj");
+          onHovorety={(p) => {
+            setProfilHolosu(p);
+            ozhuyvaty(p);
           }}
           onPrykynyty={prykynytyOzhuvannya}
           onScheOdna={() => void generuvaly("scheOdna")}
-          onProfil={setProfilHolosu}
         />
       )}
 

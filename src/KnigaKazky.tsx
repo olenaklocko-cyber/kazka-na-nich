@@ -10,6 +10,24 @@ export const PROFILI: Record<ProfilHolosu, { nazva: string; pitch: number; rate:
   charyvnyj: { nazva: "✨ Казковий", pitch: 1.5, rate: 0.85 },
 };
 
+/**
+ * Родовий відмінок імені після прийменника «для»:
+ * Даша → Даші, Оля → Олі, Андрій → Андрія, Дмитро → Дмитра, Іван → Івана.
+ */
+function doRodovoho(imia: string): string {
+  const n = imia.trim();
+  if (!n) return n;
+  const c = n[n.length - 1];
+  const p = n.length > 1 ? n[n.length - 2] : "";
+  const pryhuk = "жчшщ".includes(p);
+  if (c === "а") return n.slice(0, -1) + (pryhuk ? "і" : "и");
+  if (c === "я") return n.slice(0, -1) + ("аеєиіїоуюя".includes(p) ? "ї" : "і");
+  if (c === "о") return n + "а";
+  if (c === "й" || c === "ь") return n.slice(0, -1) + "я";
+  if ("аяуюеєиіїоюяйь".includes(c)) return n;
+  return n + "а";
+}
+
 interface Vlastyvosti {
   kazka: string;
   imia: string;
@@ -20,11 +38,9 @@ interface Vlastyvosti {
   limyt: boolean;
   zagolovokRef: RefObject<HTMLHeadingElement | null>;
   onZakryty: () => void;
-  onChytatyMami: () => void;
-  onKazkovyiHolos: () => void;
+  onHovorety: (p: ProfilHolosu) => void;
   onPrykynyty: () => void;
   onScheOdna: () => void;
-  onProfil: (p: ProfilHolosu) => void;
 }
 
 export default function KnigaKazky({
@@ -37,11 +53,9 @@ export default function KnigaKazky({
   limyt,
   zagolovokRef,
   onZakryty,
-  onChytatyMami,
-  onKazkovyiHolos,
+  onHovorety,
   onPrykynyty,
   onScheOdna,
-  onProfil,
 }: Vlastyvosti) {
   useEffect(() => {
     const naEsc = (e: KeyboardEvent) => {
@@ -81,53 +95,38 @@ export default function KnigaKazky({
           {imia && (
             <p className="knyha-dlya">
               <span className="knyha-dlya-pidkaz">Спеціально для</span>
-              <strong>{imia} 🌙</strong>
+              <strong>{doRodovoho(imia)} 🌙</strong>
             </p>
           )}
 
-          <div className="knyha-knopky">
-            <button
-              type="button"
-              className="knopka knopka-knyha"
-              aria-pressed={ohovorytysya}
-              onClick={ohovorytysya ? onPrykynyty : onChytatyMami}
-            >
-              {ohovorytysya ? "⏸ Зупинити читання" : "👩 Читати мамі"}
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-knyha knopka-knyha-kazkovyi"
-              aria-pressed={ohovorytysya && profil === "charyvnyj"}
-              onClick={ohovorytysya ? onPrykynyty : onKazkovyiHolos}
-            >
-              🔊 Увімкнути казковий голос
-            </button>
-            <button
-              type="button"
-              className="knopka knopka-knyha knopka-druhynna"
-              disabled={zavantazhennya || limyt}
-              onClick={onScheOdna}
-            >
-              🔄 Ще одна казка
-            </button>
-          </div>
-
-          <fieldset className="holos-panel knyha-holos">
-            <legend>Голос оповідача</legend>
-            <div className="holos-chipy">
-              {(Object.keys(PROFILI) as ProfilHolosu[]).map((k) => (
-                <button
-                  key={k}
-                  type="button"
-                  className={`chip ${profil === k ? "chip-aktyvnyj" : ""}`}
-                  aria-pressed={profil === k}
-                  onClick={() => onProfil(k)}
-                >
-                  {PROFILI[k].nazva}
-                </button>
-              ))}
+          <div className="knyha-ozvukka">
+            <p className="knyha-ozvukka-zagolovok">Озвучити казку:</p>
+            <div className="knyha-ozvukka-ryad">
+              <div className="holos-chipy">
+                {(Object.keys(PROFILI) as ProfilHolosu[]).map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    className={`chip ${profil === k ? "chip-aktyvnyj" : ""}`}
+                    aria-pressed={profil === k}
+                    onClick={() =>
+                      ohovorytysya && profil === k ? onPrykynyty() : onHovorety(k)
+                    }
+                  >
+                    {PROFILI[k].nazva}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                className={`kniga-play ${ohovorytysya ? "kniga-play-zapys" : ""}`}
+                aria-label={ohovorytysya ? "Зупинити озвучку" : "Озвучити казку"}
+                onClick={ohovorytysya ? onPrykynyty : () => onHovorety(profil)}
+              >
+                {ohovorytysya ? "⏹" : "▶"}
+              </button>
             </div>
-          </fieldset>
+          </div>
         </section>
 
         <section className="knyha-prava">
@@ -135,6 +134,9 @@ export default function KnigaKazky({
             {kazka}
           </article>
           <div className="knyha-kincya">
+            <button type="button" className="knopka knopka-sche-odna" disabled={zavantazhennya || limyt} onClick={onScheOdna}>
+              🔄 Ще одна казка
+            </button>
             <button type="button" className="knopka knopka-zakryty-knihu" onClick={onZakryty}>
               📕 Закрити книгу
             </button>
