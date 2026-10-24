@@ -101,6 +101,8 @@ export default function App() {
   const [slukhae, setSlukhae] = useState<PoleHolosu | null>(null);
   const [holosPomylka, setHolosPomylka] = useState<string | null>(null);
   const rozPiznavanniaRef = useRef<RozPiznavanniaHolosu | null>(null);
+  /** Чи зупинили ми сеанс самі (тоді «aborted» — це норма, а не помилка). */
+  const samSkasuvavRef = useRef(false);
 
   const [rozdil, setRozdil] = useState<Rozdil>(() =>
     window.location.hash.startsWith("#analytyka")
@@ -318,6 +320,7 @@ export default function App() {
   const slukhaty = (pole: PoleHolosu, pryjnyaty: (tekst: string) => void) => {
     setHolosPomylka(null);
     if (slukhae === pole) {
+      samSkasuvavRef.current = true;
       try {
         rozPiznavanniaRef.current?.stop();
       } catch {
@@ -331,6 +334,7 @@ export default function App() {
     } catch {
       /* попередній сеанс ще не запущено */
     }
+    samSkasuvavRef.current = false;
     const w = window as unknown as {
       SpeechRecognition?: new () => RozPiznavanniaHolosu;
       webkitSpeechRecognition?: new () => RozPiznavanniaHolosu;
@@ -357,12 +361,22 @@ export default function App() {
     roz.onerror = (podiia) => {
       if (!nashSeans()) return;
       setSlukhae(null);
+      const k = podiia.error;
+      if (k === "aborted" && samSkasuvavRef.current) return; /* ми самі зупинили */
       setHolosPomylka(
-        podiia.error === "not-allowed"
+        k === "not-allowed"
           ? "Браузер не дав доступ до мікрофона — дозволь у налаштуваннях сайту"
-          : podiia.error === "no-speech"
+          : k === "no-speech"
             ? "Нічого не почулося — спробуй ще раз і говори чіткіше"
-            : "Не вдалося розпізнати голос — спробуй ще раз",
+            : k === "network"
+              ? "Немає зв'язку зі службою розпізнавання — перевір інтернет і спробуй ще раз"
+              : k === "language-not-supported"
+                ? "Браузер не підтримує українську для розпізнавання — краще спробуй Chrome"
+                : k === "service-not-allowed"
+                  ? "Увімкни диктовку: Налаштування системи → Клавіатура → Диктовка"
+                  : k === "aborted"
+                    ? "Запис перервано — натисни мікрофон ще раз і говори спокійно"
+                    : `Не вдалося розпізнати голос (код: ${k}) — спробуй ще раз`,
       );
     };
     roz.onresult = (podiia) => {
