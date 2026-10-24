@@ -344,12 +344,18 @@ export default function App() {
     roz.lang = mova === "en" ? "en-US" : "uk-UA";
     roz.interimResults = false;
     roz.continuous = false;
+    /* Обробники старого сеансу не сміють гасити стан нового */
+    const nashSeans = () => rozPiznavanniaRef.current === roz;
     roz.onstart = () => {
+      if (!nashSeans()) return;
       setSlukhae(pole);
       setHolosPomylka(null);
     };
-    roz.onend = () => setSlukhae(null);
+    roz.onend = () => {
+      if (nashSeans()) setSlukhae(null);
+    };
     roz.onerror = (podiia) => {
+      if (!nashSeans()) return;
       setSlukhae(null);
       setHolosPomylka(
         podiia.error === "not-allowed"
@@ -360,6 +366,7 @@ export default function App() {
       );
     };
     roz.onresult = (podiia) => {
+      if (!nashSeans()) return;
       const ostannie = podiia.results[podiia.results.length - 1];
       const tekst = ostannie[0]?.transcript?.trim();
       if (tekst) {
