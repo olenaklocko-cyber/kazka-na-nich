@@ -2598,16 +2598,19 @@ body {
   background:
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4px),
     repeating-linear-gradient(-45deg, rgba(30, 50, 140, 0.07) 0 1px, transparent 1px 5px),
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.28), transparent 55%),
-    linear-gradient(155deg, #7C9BFF 0%, #5572EE 48%, #4459D8 100%);
+    radial-gradient(ellipse 72% 52% at 30% 16%, rgba(255, 255, 255, 0.42), transparent 62%),
+    radial-gradient(ellipse 60% 40% at 78% 88%, rgba(60, 80, 200, 0.5), transparent 65%),
+    linear-gradient(155deg, #8FB0FF 0%, #5D7CF2 45%, #4459D8 100%);
   border: none;
-  border-radius: 10px 18px 18px 10px / 10px 16px 16px 10px;
+  border-radius: 20px 30px 30px 20px / 18px 28px 28px 18px;
   box-shadow:
-    0 28px 55px rgba(0, 0, 0, 0.5),
-    0 10px 20px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 1.5px rgba(255, 255, 255, 0.28),
-    inset -8px -10px 26px rgba(40, 55, 140, 0.35),
-    inset 10px 12px 24px rgba(255, 255, 255, 0.18);
+    0 30px 60px rgba(0, 0, 0, 0.55),
+    0 12px 24px rgba(0, 0, 0, 0.4),
+    0 0 44px rgba(252, 211, 77, 0.16),
+    inset 0 2px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -14px 28px rgba(35, 50, 140, 0.5),
+    inset 14px 16px 32px rgba(255, 255, 255, 0.22),
+    inset -10px -12px 26px rgba(40, 55, 140, 0.35);
   padding: 30px 20px 26px 46px;
   transform: rotate(-5deg);
   display: flex;
@@ -2629,7 +2632,7 @@ body {
   top: 0;
   bottom: 0;
   width: 32px;
-  border-radius: 10px 0 0 10px;
+  border-radius: 18px 0 0 18px / 16px 0 0 16px;
   background:
     linear-gradient(#F2C14E, #F2C14E) 0 54px / 100% 3px no-repeat,
     linear-gradient(#F2C14E, #F2C14E) 0 calc(100% - 54px) / 100% 3px no-repeat,
@@ -2648,7 +2651,7 @@ body {
   top: 8px;
   bottom: 8px;
   width: 15px;
-  border-radius: 0 7px 7px 0;
+  border-radius: 0 14px 14px 0 / 0 12px 12px 0;
   background: repeating-linear-gradient(180deg, #FFFDF3 0 3px, #EFE4C6 3px 5px);
   box-shadow: 5px 7px 14px rgba(0, 0, 0, 0.45), inset -3px 0 6px rgba(160, 120, 50, 0.28);
   pointer-events: none;
@@ -2667,7 +2670,7 @@ body {
   bottom: 10px;
   left: 36px;
   border: 1.5px solid transparent;
-  border-radius: 6px 12px 12px 6px / 6px 10px 10px 6px;
+  border-radius: 14px 24px 24px 14px / 12px 22px 22px 12px;
   background: linear-gradient(110deg, rgba(242, 193, 78, 0.9), rgba(255, 243, 196, 0.95), rgba(242, 193, 78, 0.9)) border-box;
   background-size: 250% 100%;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
@@ -2686,7 +2689,7 @@ body {
   right: 15px;
   bottom: 15px;
   left: 41px;
-  border-radius: 4px 10px 10px 4px / 4px 8px 8px 4px;
+  border-radius: 12px 20px 20px 12px / 10px 18px 18px 10px;
   background:
     linear-gradient(#F2C14E, #F2C14E) left top / 24px 2.5px no-repeat,
     linear-gradient(#F2C14E, #F2C14E) left top / 2.5px 24px no-repeat,
@@ -2744,6 +2747,58 @@ body {
   top: 32%;
   left: 10%;
   font-size: 9px;
+}
+
+/* 3D-перо — лежить на верхньому кутку обкладинки */
+.kut-suvij-uroku .kniga-pero {
+  position: absolute;
+  top: -8px;
+  right: -20px;
+  width: 76px;
+  height: 76px;
+  z-index: 2;
+  transform-origin: 68% 22%;
+  animation: pero-kachka 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+@keyframes pero-kachka {
+  0%, 100% { transform: rotate(12deg); }
+  50% { transform: rotate(22deg); }
+}
+
+/* Магічні іскри, що вилітають із книжки — ШІ генерує казку */
+.kut-suvij-uroku .kniga-isky {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -64px;
+  height: 84px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.kut-suvij-uroku .kniga-isky i {
+  position: absolute;
+  bottom: 0;
+  font-style: normal;
+  color: #FFE9A8;
+  text-shadow: 0 0 8px rgba(255, 217, 100, 0.9);
+  animation: iska-litate 3s ease-in-out infinite;
+}
+
+.kut-suvij-uroku .kniga-isky i:nth-child(1) { left: 10%; font-size: 10px; animation-delay: 0s; }
+.kut-suvij-uroku .kniga-isky i:nth-child(2) { left: 30%; font-size: 14px; animation-delay: 0.6s; }
+.kut-suvij-uroku .kniga-isky i:nth-child(3) { left: 50%; font-size: 9px; animation-delay: 1.2s; }
+.kut-suvij-uroku .kniga-isky i:nth-child(4) { left: 68%; font-size: 12px; animation-delay: 0.3s; }
+.kut-suvij-uroku .kniga-isky i:nth-child(5) { left: 86%; font-size: 10px; animation-delay: 0.9s; }
+
+@keyframes iska-litate {
+  0% { transform: translateY(10px) scale(0.7); opacity: 0; }
+  25% { opacity: 1; }
+  70% { opacity: 0.85; }
+  100% { transform: translateY(-44px) scale(1.1); opacity: 0; }
 }
 
 /* Червона закладка-ляссе, що грайливо звисає знизу книжки */

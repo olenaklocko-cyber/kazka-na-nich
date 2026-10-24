@@ -824,6 +824,34 @@ export default function App() {
             <span className="kniga-ramka" aria-hidden="true" />
             <span className="kniga-kutochky" aria-hidden="true" />
             <span className="kniga-zirky" aria-hidden="true" />
+            <span className="kniga-pero" aria-hidden="true">
+              <svg viewBox="0 0 64 64" width="100%" height="100%">
+                <defs>
+                  <linearGradient id="peroZoloto" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stopColor="#FFF6D0" />
+                    <stop offset="0.55" stopColor="#F2C14E" />
+                    <stop offset="1" stopColor="#D9A020" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M46 5 C 54 13 57 28 51 40 C 47 48 39 52 32 50 C 25 48 22 39 26 31 C 31 20 39 11 46 5 Z"
+                  fill="url(#peroZoloto)"
+                />
+                <path
+                  d="M44 9 C 36 19 30 30 30 44"
+                  fill="none"
+                  stroke="#C9922B"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+                <path d="M38 17 L 34 27 M 43 25 L 39 35 M 47 33 L 44 41" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" strokeLinecap="round" />
+                <path d="M30 44 L 15 54" stroke="#E8B84B" strokeWidth="3.5" strokeLinecap="round" />
+                <path d="M15 54 L 10 59" stroke="#8B6914" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+            </span>
+            <span className="kniga-isky" aria-hidden="true">
+              <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
+            </span>
             <span className="kniga-zakladka" aria-hidden="true" />
             <p className="kut-nadpis">Чому навчить казка?</p>
             <div className="khmara-imia">
