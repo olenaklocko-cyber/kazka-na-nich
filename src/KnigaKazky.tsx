@@ -80,7 +80,8 @@ export default function KnigaKazky({
           </h2>
           {imia && (
             <p className="knyha-dlya">
-              Спеціально для <strong>{imia}</strong> 🌙
+              <span className="knyha-dlya-pidkaz">Спеціально для</span>
+              <strong>{imia} 🌙</strong>
             </p>
           )}
 

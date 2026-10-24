@@ -2214,6 +2214,128 @@ body {
   box-shadow: 0 12px 26px rgba(255, 157, 77, 0.55);
 }
 
+/* ===== Ліва панель: єдина благородна гама замість веселки ===== */
+
+/* Головний рядок — ім'я дитини */
+.knyha-dlya {
+  text-align: center;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  margin: 4px 0 24px;
+  line-height: 1.18;
+}
+
+.knyha-dlya-pidkaz {
+  display: block;
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #b08a3e;
+  margin-bottom: 6px;
+}
+
+.knyha-dlya strong {
+  display: block;
+  font-size: clamp(34px, 3.8vw, 52px);
+  font-weight: 800;
+  color: #8a4b12;
+  text-shadow:
+    0 0 22px rgba(252, 211, 77, 0.65),
+    0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Кнопки: глибокий магічний фіолет із золотим кантом */
+.knyha-knopky .knopka-knyha {
+  background: linear-gradient(160deg, #5b3a9e 0%, #43277b 55%, #351e66 100%);
+  border: 1.5px solid rgba(242, 193, 78, 0.55);
+  color: #ffeec2;
+  font-size: 15.5px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  letter-spacing: 0.2px;
+  box-shadow:
+    0 6px 16px rgba(53, 30, 102, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.knyha-knopky .knopka-knyha:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(252, 211, 77, 0.9);
+  box-shadow:
+    0 10px 22px rgba(53, 30, 102, 0.45),
+    0 0 18px rgba(252, 211, 77, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  filter: brightness(1.06);
+}
+
+/* Другорядна кнопка — тонка рамка в тій самій гамі */
+.knyha-knopky .knopka-druhynna {
+  background: rgba(53, 30, 102, 0.06);
+  border: 1.5px solid rgba(67, 39, 123, 0.5);
+  color: #43277b;
+}
+
+.knyha-knopky .knopka-druhynna:hover:not(:disabled) {
+  background: rgba(53, 30, 102, 0.11);
+  border-color: rgba(67, 39, 123, 0.85);
+  box-shadow: 0 6px 14px rgba(53, 30, 102, 0.2);
+  transform: translateY(-2px);
+  filter: none;
+}
+
+/* Панель голосів — м'яка, без грубих рамок */
+.knyha-holos {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(214, 169, 89, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.knyha-holos legend {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #b08a3e;
+  padding: 0 8px;
+}
+
+.knyha-holos .holos-chipy {
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 0;
+}
+
+.knyha-holos .chip {
+  min-height: 40px;
+  padding: 7px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b4a22;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid rgba(180, 130, 60, 0.4);
+  box-shadow: 0 2px 6px rgba(120, 90, 40, 0.12);
+}
+
+.knyha-holos .chip:hover {
+  color: #43277b;
+  border-color: rgba(67, 39, 123, 0.55);
+  box-shadow: 0 4px 10px rgba(67, 39, 123, 0.16);
+}
+
+.knyha-holos .chip-aktyvnyj {
+  color: #ffeec2;
+  background: linear-gradient(160deg, #5b3a9e 0%, #43277b 100%);
+  border-color: rgba(242, 193, 78, 0.85);
+  box-shadow:
+    0 4px 12px rgba(67, 39, 123, 0.4),
+    0 0 14px rgba(252, 211, 77, 0.35);
+}
+
+.knyha-holos .chip-aktyvnyj:hover {
+  color: #ffeec2;
+  border-color: rgba(252, 211, 77, 1);
+}
+
 /* Чарівний бігунок — золотий вказівник на паперовій колії */
 .knyha-lyeva::-webkit-scrollbar,
 .knyha-prava::-webkit-scrollbar {
