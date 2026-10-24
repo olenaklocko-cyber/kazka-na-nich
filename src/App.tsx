@@ -93,6 +93,10 @@ export default function App() {
   const [pomylka, setPomylka] = useState<string | null>(null);
   const [stan, setStan] = useState<Stan | null>(null);
   const [ohovorytysya, setOhovorytysya] = useState(false);
+  const [holosZavantazhennya, setHolosZavantazhennya] = useState(false);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const dzhereloRef = useRef<AudioBufferSourceNode | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
   const [profilHolosu, setProfilHolosu] = useState<ProfilHolosu>("mama");
   const [holosy, setHolosy] = useState<SpeechSynthesisVoice[]>([]);
   const rezultatRef = useRef<HTMLHeadingElement>(null);
@@ -442,7 +446,37 @@ export default function App() {
     }
   };
 
-  const ozhuyvaty = (zminenyjProfil?: ProfilHolosu) => {
+  /** Лінивий AudioContext (один на застосунок). */
+  const getsAudioCtx = (): AudioContext => {
+    if (!audioCtxRef.current) {
+      const AC =
+        window.AudioContext ??
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (AC) audioCtxRef.current = new AC();
+    }
+    if (!audioCtxRef.current) throw new Error("Web Audio недоступний");
+    return audioCtxRef.current;
+  };
+
+  /** Зупиняє все: ШІ-джерело, системний синтез і триваючий запит. */
+  const zupynytyVseAudio = () => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    const src = dzhereloRef.current;
+    if (src) {
+      dzhereloRef.current = null;
+      src.onended = null;
+      try {
+        src.stop();
+      } catch {
+        /* джерело вже зупинене */
+      }
+    }
+    window.speechSynthesis.cancel();
+  };
+
+  /** Запасний шлях: системний синтез мовлення, якщо ШІ-сервіс недоступний. */
+  const ozhuyvatySystemno = (zminenyjProfil?: ProfilHolosu) => {
     if (!kazka) return;
     const speech = window.speechSynthesis;
     speech.cancel();
@@ -459,8 +493,66 @@ export default function App() {
     speech.speak(utterance);
   };
 
+  /**
+   * ШІ-озвучка: /api/ozvuka (Gemini TTS) → MP3 → Web Audio.
+   * Контекст розблоковується синхронно в кліку (вимога Safari),
+   * тому після тривалого завантаження відтворення не блокується.
+   * Фолбек — системний синтез мовлення.
+   */
+  const ozhuyvaty = async (zminenyjProfil?: ProfilHolosu) => {
+    if (!kazka) return;
+    const profil = zminenyjProfil ?? profilHolosu;
+    zupynytyVseAudio();
+    const ctx = getsAudioCtx(); // до першого await — у межах жесту
+    void ctx.resume().catch(() => {});
+    setHolosZavantazhennya(true);
+    const ac = new AbortController();
+    abortRef.current = ac;
+    try {
+      const res = await fetch("/api/ozvuka", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tekst: kazka, profil, mova }),
+        signal: ac.signal,
+      });
+      if (!res.ok) throw new Error(`tts ${res.status}`);
+      const syra = await res.arrayBuffer();
+      if (ac.signal.aborted) {
+        setHolosZavantazhennya(false);
+        return;
+      }
+      const buffer = await ctx.decodeAudioData(syra);
+      if (ac.signal.aborted) {
+        setHolosZavantazhennya(false);
+        return;
+      }
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      src.onended = () => {
+        dzhereloRef.current = null;
+        setOhovorytysya(false);
+        setHolosZavantazhennya(false);
+      };
+      dzhereloRef.current = src;
+      src.connect(ctx.destination);
+      setHolosZavantazhennya(false);
+      setOhovorytysya(true);
+      podie("ozvuka", { profil });
+      src.start();
+    } catch {
+      if (ac.signal.aborted) {
+        setHolosZavantazhennya(false);
+        setOhovorytysya(false);
+        return;
+      }
+      setHolosZavantazhennya(false);
+      ozhuyvatySystemno(profil);
+    }
+  };
+
   const prykynytyOzhuvannya = () => {
-    window.speechSynthesis.cancel();
+    zupynytyVseAudio();
+    setHolosZavantazhennya(false);
     setOhovorytysya(false);
   };
 
@@ -922,6 +1014,7 @@ export default function App() {
           }}
           onPrykynyty={prykynytyOzhuvannya}
           onScheOdna={() => void generuvaly("scheOdna")}
+          holosZavantazhennya={holosZavantazhennya}
         />
       )}
 

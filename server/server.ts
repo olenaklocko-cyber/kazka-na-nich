@@ -7,6 +7,7 @@
  *   POST /api/status        — Pro / лічильник / демо-режим
  *   POST /api/checkout      — створення оплати (LiqPay або демо-токен)
  *   POST /api/pay/confirm   — підтвердження оплати (демо-токен або підпис LiqPay)
+ *   POST /api/ozvuka        — ШІ-озвучка казки (голоси Мама/Тато/Казковий) → MP3
  */
 import { createServer } from "node:http";
 import type { IncomingMessage, ServerResponse } from "node:http";
@@ -15,6 +16,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Obrobka, RobochaVidpovid } from "../shared/pro.js";
 import { obrobytyCheckout, obrobytyKazka, obrobytyPayConfirm, obrobytyStatus } from "../shared/pro.js";
+import { obrobytyOzvuka } from "../shared/ozvuka.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? process.env.SERVER_PORT ?? 3002);
@@ -144,6 +146,33 @@ const server = createServer((req, res) => {
 
   const url = (req.url ?? "/").split("?")[0];
   if (sprobovatyStatyku(req, res)) return;
+
+  // Озвучка повертає MP3-байти, тому обробляється окремо від JSON-мапи
+  if (url === "/api/ozvuka" && req.method === "POST") {
+    prochytatyTilo(req, (body) => {
+      void (async () => {
+        try {
+          const vidpovid = await obrobytyOzvuka((body ?? {}) as Record<string, unknown>);
+          if (vidpovid.kind === "audio") {
+            res.writeHead(200, {
+              "Content-Type": vidpovid.contentType,
+              "Cache-Control": "public, max-age=3600",
+            });
+            res.end(vidpovid.body);
+          } else {
+            res.writeHead(vidpovid.status, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ pomylka: vidpovid.pomylka }));
+          }
+        } catch (e) {
+          console.error("Помилка озвучки:", e);
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ pomylka: "Помилка сервера" }));
+        }
+      })();
+    });
+    return;
+  }
+
   const obrobyty = req.method === "POST" ? MARshruty[url] : undefined;
 
   if (!obrobyty) {

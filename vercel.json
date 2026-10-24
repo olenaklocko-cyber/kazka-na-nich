@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/ozvuka.ts": {
+      "maxDuration": 60
+    }
+  }
+}

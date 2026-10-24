@@ -33,6 +33,7 @@ interface Vlastyvosti {
   imia: string;
   mova: "uk" | "en";
   ohovorytysya: boolean;
+  holosZavantazhennya: boolean;
   profil: ProfilHolosu;
   zavantazhennya: boolean;
   limyt: boolean;
@@ -48,6 +49,7 @@ export default function KnigaKazky({
   imia,
   mova,
   ohovorytysya,
+  holosZavantazhennya,
   profil,
   zavantazhennya,
   limyt,
@@ -119,11 +121,15 @@ export default function KnigaKazky({
               </div>
               <button
                 type="button"
-                className={`kniga-play ${ohovorytysya ? "kniga-play-zapys" : ""}`}
-                aria-label={ohovorytysya ? "Зупинити озвучку" : "Озвучити казку"}
-                onClick={ohovorytysya ? onPrykynyty : () => onHovorety(profil)}
+                className={`kniga-play ${ohovorytysya || holosZavantazhennya ? "kniga-play-zapys" : ""}`}
+                aria-label={
+                  ohovorytysya || holosZavantazhennya ? "Зупинити озвучку" : "Озвучити казку"
+                }
+                onClick={
+                  ohovorytysya || holosZavantazhennya ? onPrykynyty : () => onHovorety(profil)
+                }
               >
-                {ohovorytysya ? "⏹" : "▶"}
+                {holosZavantazhennya ? "⏳" : ohovorytysya ? "⏹" : "▶"}
               </button>
             </div>
           </div>
