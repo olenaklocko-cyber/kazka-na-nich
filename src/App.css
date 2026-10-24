@@ -2487,7 +2487,7 @@ body {
   pointer-events: none;
   font-size: 350px;
   line-height: 1;
-  margin: 34px 0 0 -8px;
+  margin: 34px 0 0 -52px;
   user-select: none;
   filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.5));
 }
@@ -2510,7 +2510,7 @@ body {
 
   .vedmedyk-ikona {
     font-size: 230px;
-    margin: 34px 0 0 -10px;
+    margin: 34px 0 0 -42px;
   }
 
   .brelok {
