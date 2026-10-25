@@ -927,7 +927,6 @@ export default function App() {
                   type="text"
                   className="khmara-imia-vkhid"
                   value={urok}
-                  list="spysok-urokiv"
                   maxLength={80}
                   placeholder="Чому чистити зуби?"
                   autoComplete="off"
@@ -958,12 +957,23 @@ export default function App() {
                     </svg>
                   )}
                 </button>
+                {/* Приклади тем — працюють і на телефоні (замість datalist) */}
+                <div className="urok-nadyly" aria-label="Приклади тем казок">
+                  {UROKY.map((u) => (
+                    <button
+                      key={u}
+                      type="button"
+                      className="urok-nadyska"
+                      onClick={() => {
+                        formStart();
+                        setUrok(u);
+                      }}
+                    >
+                      {u}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <datalist id="spysok-urokiv">
-                {UROKY.map((u) => (
-                  <option key={u} value={u} />
-                ))}
-              </datalist>
             </div>
             {/* Фінальний акорд — по центру під героями */}
             <button
