@@ -513,6 +513,8 @@ export default function App() {
     const ac = new AbortController();
     abortRef.current = ac;
     const keshKlyuch = `${mova}|${profil}|${kazka}`;
+    podie("ozvuka_start", { profil });
+    const byloVKeshi = holosKeshRef.current.has(keshKlyuch);
     try {
       let buffer = holosKeshRef.current.get(keshKlyuch);
       if (!buffer) {
@@ -542,21 +544,29 @@ export default function App() {
         dzhereloRef.current = null;
         setOhovorytysya(false);
         setHolosZavantazhennya(false);
+        podie("ozvuka_kince", { profil });
       };
+      // Гарантія: контекст має бути активним, інакше буде тиша
+      await ctx.resume().catch(() => {});
+      if (ctx.state !== "running") {
+        throw new Error(`audioctx ${ctx.state}`);
+      }
       dzhereloRef.current = src;
       src.connect(ctx.destination);
       setHolosZavantazhennya(false);
       setOhovorytysya(true);
       setHolosSystemnyj(false);
-      podie("ozvuka", { profil });
+      podie("ozvuka", { profil, stan: ctx.state, kesh: byloVKeshi });
       src.start();
+      podie("ozvuka_hraie", { profil, tryvalist: Math.round(buffer.duration) });
     } catch (e) {
       if (ac.signal.aborted) {
         setHolosZavantazhennya(false);
         setOhovorytysya(false);
         return;
       }
-      const prychyna = e instanceof Error && /tts/.test(e.message) ? "server" : "client";
+      const prychyna =
+        e instanceof Error ? (/tts/.test(e.message) ? "server" : e.message.slice(0, 40)) : "client";
       podie("ozvuka_fallback", { profil, prychyna });
       setHolosSystemnyj(true);
       setHolosZavantazhennya(false);
