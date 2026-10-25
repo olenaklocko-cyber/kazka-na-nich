@@ -3856,3 +3856,196 @@ body {
     animation: none;
   }
 }
+
+
+/* ============================================================
+   ДАШБОРД НАЛАШТУВАНЬ — преміальний UI:
+   картки, сегментований таб-бар, градієнтні воронки, великі цифри.
+   Усі кольори — через токени, тому працює в обох темах.
+   ============================================================ */
+
+/* --- Сегментований таб-бар (замість кнопок з рамками) --- */
+.nastroika-vkladky {
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--ramka-myaka);
+  border-radius: 16px;
+  background: var(--fon-2);
+  margin-bottom: 18px;
+}
+
+.nastroika-vkladky .knopka-vkladka {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--tekst-2);
+  border-radius: 12px;
+  min-height: 40px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+.nastroika-vkladky .knopka-vkladka:hover:not(:disabled) {
+  background: var(--poverkhnya-2);
+  color: var(--tekst);
+  filter: none;
+  transform: none;
+  box-shadow: none;
+}
+
+.nastroika-vkladky .knopka-vkladka[aria-pressed="true"] {
+  background: linear-gradient(135deg, #8b5cf6 0%, #4f46e5 55%, #3730a3 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.42);
+}
+
+/* --- Картки секцій (Dashboard UI) --- */
+.zvit-sektsiia {
+  background: var(--poverkhnya);
+  border: 1px solid var(--ramka-myaka);
+  border-radius: 22px;
+  padding: clamp(18px, 2.5vw, 26px);
+  margin-bottom: 18px;
+  box-shadow:
+    0 12px 32px rgba(15, 23, 42, 0.1),
+    0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+[data-tema="den"] .zvit-sektsiia {
+  box-shadow:
+    0 16px 40px rgba(15, 23, 42, 0.1),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* --- Заголовки секцій: акуратний акцент-бар --- */
+.zvit-sektsiia h3 {
+  position: relative;
+  margin: 0 0 16px;
+  padding-left: 15px;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  font-size: clamp(17px, 1.7vw, 21px);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  color: var(--tekst);
+}
+
+.zvit-sektsiia h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.12em;
+  bottom: 0.12em;
+  width: 5px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #8b5cf6, #4338ca);
+}
+
+/* --- Шапка звіту --- */
+.zvit-shapka h2 {
+  margin: 0;
+  font-family: "Comfortaa", ui-rounded, sans-serif;
+  font-size: clamp(20px, 2.3vw, 27px);
+  font-weight: 800;
+  color: var(--tekst);
+}
+
+/* --- Воронка: товсті округлі бруски із градієнтом --- */
+.voronka-ryadok {
+  margin-bottom: 6px;
+}
+
+.voronka-dyuzhyna {
+  height: 22px;
+  border: none;
+  background: var(--poverkhnya-2);
+  box-shadow: inset 0 2px 5px rgba(15, 23, 42, 0.14);
+  overflow: hidden;
+}
+
+.voronka-zapovnennia {
+  background: linear-gradient(90deg, #8b5cf6 0%, #6366f1 48%, #3730a3 100%);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.5);
+}
+
+/* --- Великі чіткі цифри конверсій --- */
+.voronka-chysla {
+  font-size: clamp(17px, 1.7vw, 21px);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* --- Таблиця A/B: чиста й сучасна --- */
+.ab-tablitsya thead th {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--tekst-3);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ramka-myaka);
+}
+
+.ab-tablitsya tbody th,
+.ab-tablitsya tbody td {
+  padding: 13px 12px;
+  border-bottom: 1px dashed var(--ramka-myaka);
+  text-align: left;
+}
+
+.ab-tablitsya tbody tr:last-child th,
+.ab-tablitsya tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ab-tablitsya tbody tr {
+  transition: background 0.2s ease;
+}
+
+.ab-tablitsya tbody tr:hover {
+  background: var(--tisnina);
+}
+
+.ab-tablitsya tbody th {
+  font-weight: 600;
+  color: var(--tekst);
+}
+
+.ab-tablitsya tbody td:last-child {
+  font-size: clamp(17px, 1.7vw, 21px);
+  font-weight: 800;
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* У денному режимі цифри — глибокіші для контрасту на білому */
+[data-tema="den"] .voronka-chysla,
+[data-tema="den"] .ab-tablitsya tbody td:last-child {
+  background: linear-gradient(135deg, #6d3df0 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* --- Висновок — м'яка плашка --- */
+.zvit-visnovok {
+  background: var(--tisnina);
+  border: 1px dashed var(--ramka-myaka);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 14px;
+}
