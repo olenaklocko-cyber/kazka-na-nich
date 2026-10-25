@@ -97,6 +97,9 @@ export default function App() {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const dzhereloRef = useRef<AudioBufferSourceNode | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  /** Кеш озвучки: та сама казка + голос → та сама дубляція, миттєвий повтор. */
+  const holosKeshRef = useRef<Map<string, AudioBuffer>>(new Map());
+  const [holosSystemnyj, setHolosSystemnyj] = useState(false);
   const [profilHolosu, setProfilHolosu] = useState<ProfilHolosu>("mama");
   const [holosy, setHolosy] = useState<SpeechSynthesisVoice[]>([]);
   const rezultatRef = useRef<HTMLHeadingElement>(null);
@@ -437,6 +440,7 @@ export default function App() {
         return;
       }
       podie("kazka_uspikh", { dovzhyta: data.tekst.length });
+      holosKeshRef.current.clear();
       setKazka(data.tekst);
       window.setTimeout(() => rezultatRef.current?.focus(), 60);
     } catch {
@@ -505,23 +509,28 @@ export default function App() {
     zupynytyVseAudio();
     const ctx = getsAudioCtx(); // до першого await — у межах жесту
     void ctx.resume().catch(() => {});
-    setHolosZavantazhennya(true);
     const ac = new AbortController();
     abortRef.current = ac;
+    const keshKlyuch = `${mova}|${profil}|${kazka}`;
     try {
-      const res = await fetch("/api/ozvuka", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tekst: kazka, profil, mova }),
-        signal: ac.signal,
-      });
-      if (!res.ok) throw new Error(`tts ${res.status}`);
-      const syra = await res.arrayBuffer();
-      if (ac.signal.aborted) {
-        setHolosZavantazhennya(false);
-        return;
+      let buffer = holosKeshRef.current.get(keshKlyuch);
+      if (!buffer) {
+        setHolosZavantazhennya(true);
+        const res = await fetch("/api/ozvuka", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tekst: kazka, profil, mova }),
+          signal: ac.signal,
+        });
+        if (!res.ok) throw new Error(`tts ${res.status}`);
+        const syra = await res.arrayBuffer();
+        if (ac.signal.aborted) {
+          setHolosZavantazhennya(false);
+          return;
+        }
+        buffer = await ctx.decodeAudioData(syra);
+        holosKeshRef.current.set(keshKlyuch, buffer);
       }
-      const buffer = await ctx.decodeAudioData(syra);
       if (ac.signal.aborted) {
         setHolosZavantazhennya(false);
         return;
@@ -537,14 +546,18 @@ export default function App() {
       src.connect(ctx.destination);
       setHolosZavantazhennya(false);
       setOhovorytysya(true);
+      setHolosSystemnyj(false);
       podie("ozvuka", { profil });
       src.start();
-    } catch {
+    } catch (e) {
       if (ac.signal.aborted) {
         setHolosZavantazhennya(false);
         setOhovorytysya(false);
         return;
       }
+      const prychyna = e instanceof Error && /tts/.test(e.message) ? "server" : "client";
+      podie("ozvuka_fallback", { profil, prychyna });
+      setHolosSystemnyj(true);
       setHolosZavantazhennya(false);
       ozhuyvatySystemno(profil);
     }
@@ -555,6 +568,8 @@ export default function App() {
     setHolosZavantazhennya(false);
     setOhovorytysya(false);
   };
+
+  /* примітка про системний голос показується в книзі (holosSystemnyj) */
 
   /* ======================= ОПЛАТА (тиждень 3) ======================= */
 
@@ -1015,6 +1030,7 @@ export default function App() {
           onPrykynyty={prykynytyOzhuvannya}
           onScheOdna={() => void generuvaly("scheOdna")}
           holosZavantazhennya={holosZavantazhennya}
+          holosSystemnyj={holosSystemnyj}
         />
       )}
 

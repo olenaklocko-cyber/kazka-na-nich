@@ -46,7 +46,8 @@ const PROFILI_TTS: Record<string, ProfilTTS> = {
     voice: "en-us-assistant-11",
     style:
       "М'яким, теплим, заспокійливим жіночим голосом мами. Повільний, ніжний, лагідний темп — щоб дитина засинала. " +
-      "Природні ніжні інтонації, без різких наголосів, тихо й лагідно, як читають колискову на ніч.",
+      "Говори рівно й однаково від першого слова до останнього: без різких змін висоти й темпу, без різких наголосів, " +
+      "без раптових емоцій. Тільки ніжний спокійний тон, тихо, як читають колискову на ніч.",
     styleEn:
       "In a soft, warm, soothing mother's voice. Slow, gentle, tender pace for putting a child to sleep. " +
       "Natural gentle intonations, no sharp emphasis, quiet and tender like reading a lullaby at night.",

@@ -34,6 +34,7 @@ interface Vlastyvosti {
   mova: "uk" | "en";
   ohovorytysya: boolean;
   holosZavantazhennya: boolean;
+  holosSystemnyj: boolean;
   profil: ProfilHolosu;
   zavantazhennya: boolean;
   limyt: boolean;
@@ -50,6 +51,7 @@ export default function KnigaKazky({
   mova,
   ohovorytysya,
   holosZavantazhennya,
+  holosSystemnyj,
   profil,
   zavantazhennya,
   limyt,
@@ -132,6 +134,11 @@ export default function KnigaKazky({
                 {holosZavantazhennya ? "⏳" : ohovorytysya ? "⏹" : "▶"}
               </button>
             </div>
+            {holosSystemnyj && (
+              <p className="knyha-ozvuka-system" role="note">
+                ⚠️ ШІ-сервіс тимчасово недоступний — зараз звучить системний голос
+              </p>
+            )}
           </div>
         </section>
 
