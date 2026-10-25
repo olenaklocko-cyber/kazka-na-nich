@@ -3220,6 +3220,9 @@ body {
   .kut-suvij-uroku {
     position: relative;
     inset: auto;
+    max-width: 330px;
+    min-height: 360px;
+    margin: 4px auto;
   }
 
   .kut-khmara-imia {

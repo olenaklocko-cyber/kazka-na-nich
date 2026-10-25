@@ -912,6 +912,59 @@ export default function App() {
               ))}
             </datalist>
 
+            {/* Чарівна закрита книжечка — нижній правий кут */}
+            <div className="kut-suvij-uroku">
+              <span className="kniga-ramka" aria-hidden="true" />
+              <span className="kniga-kutochky" aria-hidden="true" />
+              <span className="kniga-zirky" aria-hidden="true" />
+              <span className="kniga-isky" aria-hidden="true">
+                <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
+              </span>
+              <p className="kut-nadpis">Чому навчить казка?</p>
+              <div className="khmara-imia">
+                <input
+                  id="urok"
+                  type="text"
+                  className="khmara-imia-vkhid"
+                  value={urok}
+                  list="spysok-urokiv"
+                  maxLength={80}
+                  placeholder="Чому чистити зуби?"
+                  autoComplete="off"
+                  disabled={limyt}
+                  onChange={(e) => {
+                    formStart();
+                    setUrok(e.target.value);
+                  }}
+                />
+                <button
+                  type="button"
+                  className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
+                  disabled={limyt}
+                  aria-label={
+                    slukhae === "urok" ? "Зупинити запис: тема казки" : "Сказати тему казки голосом"
+                  }
+                  aria-pressed={slukhae === "urok"}
+                  onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
+                >
+                  {slukhae === "urok" ? (
+                    "⏹"
+                  ) : (
+                    <svg className="mikrofon-svg" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+                      <rect x="9" y="2.5" width="6" height="11" rx="3" fill="currentColor" />
+                      <path d="M6.5 11a5.5 5.5 0 0 0 11 0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M12 16.5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                      <path d="M8.5 20.5h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <datalist id="spysok-urokiv">
+                {UROKY.map((u) => (
+                  <option key={u} value={u} />
+                ))}
+              </datalist>
+            </div>
             {/* Фінальний акорд — по центру під героями */}
             <button
               type="submit"
@@ -945,59 +998,6 @@ export default function App() {
             )}
           </section>
 
-          {/* Чарівна закрита книжечка — нижній правий кут */}
-          <div className="kut-suvij-uroku">
-            <span className="kniga-ramka" aria-hidden="true" />
-            <span className="kniga-kutochky" aria-hidden="true" />
-            <span className="kniga-zirky" aria-hidden="true" />
-            <span className="kniga-isky" aria-hidden="true">
-              <i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i>
-            </span>
-            <p className="kut-nadpis">Чому навчить казка?</p>
-            <div className="khmara-imia">
-              <input
-                id="urok"
-                type="text"
-                className="khmara-imia-vkhid"
-                value={urok}
-                list="spysok-urokiv"
-                maxLength={80}
-                placeholder="Чому чистити зуби?"
-                autoComplete="off"
-                disabled={limyt}
-                onChange={(e) => {
-                  formStart();
-                  setUrok(e.target.value);
-                }}
-              />
-              <button
-                type="button"
-                className={`khmara-mikrofon khmara-mikrofon-malyj ${slukhae === "urok" ? "khmara-mikrofon-zapys" : ""}`}
-                disabled={limyt}
-                aria-label={
-                  slukhae === "urok" ? "Зупинити запис: тема казки" : "Сказати тему казки голосом"
-                }
-                aria-pressed={slukhae === "urok"}
-                onClick={() => slukhaty("urok", (t) => setUrok((p) => (p ? `${p} ` : "") + t))}
-              >
-                {slukhae === "urok" ? (
-                  "⏹"
-                ) : (
-                  <svg className="mikrofon-svg" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-                    <rect x="9" y="2.5" width="6" height="11" rx="3" fill="currentColor" />
-                    <path d="M6.5 11a5.5 5.5 0 0 0 11 0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M12 16.5v3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M8.5 20.5h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                  </svg>
-                )}
-              </button>
-            </div>
-            <datalist id="spysok-urokiv">
-              {UROKY.map((u) => (
-                <option key={u} value={u} />
-              ))}
-            </datalist>
-          </div>
         </form>
 
         {kazka && !knyhaVidkrita && (
