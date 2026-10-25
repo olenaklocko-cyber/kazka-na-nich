@@ -4049,3 +4049,98 @@ body {
   padding: 12px 14px;
   margin-top: 14px;
 }
+
+
+/* ============================================================
+   КРАСИВА МОБІЛЬНА ВЕРСІЯ (≤760px) — адаптована під телефон
+   ============================================================ */
+
+@media (max-width: 760px) {
+  /* Кнопки керування прибираються вгору сторінки — не накривають контент */
+  .chytka-keruvannya {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* --- Титульна: компактна шапка в один рядок --- */
+  .landing-verkh {
+    order: 1;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .landing-verkh-pravo {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .landing-brend {
+    font-size: 14.5px;
+    white-space: nowrap;
+  }
+
+  .status-pidpysku {
+    padding: 5px 8px;
+    gap: 6px;
+  }
+
+  .status-pidpysku .knopka-mala {
+    min-height: 36px;
+    padding: 5px 11px;
+    font-size: 14px;
+  }
+
+  .status-tekst {
+    font-size: 12.5px;
+  }
+
+  /* Заголовок — в один рядок, без розриву «ніч» окремо */
+  .landing-zagolovok {
+    font-size: clamp(56px, 15.5vw, 66px);
+    white-space: nowrap;
+  }
+
+  /* Заголовкова зона */
+  .landing-tilo {
+    order: 2;
+    padding: 10px 16px 4px;
+  }
+
+  /* Місяць-кнопка: під заголовком, по центру — не перекриває шестірню */
+  .misyats-obinka {
+    position: static;
+    order: 3;
+    width: 150px;
+    margin: 8px auto 12px;
+  }
+
+  .misyats {
+    width: 150px;
+    height: 150px;
+    padding: 16px;
+  }
+
+  /* Підказки знизу — дихають і не налазять на сцену */
+  .landing-pidkas {
+    order: 4;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .landing-nizh {
+    order: 5;
+    padding-bottom: 205px;
+    font-size: 13px;
+  }
+
+  /* Сцена ліжечка — нижче текстів, по центру */
+  .vedmedyk-scena {
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    bottom: 64px;
+  }
+}
