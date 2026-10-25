@@ -4035,6 +4035,34 @@ body {
   color: transparent;
 }
 
+/* --- Денний режим: низ конструктора має бути чітким --- */
+[data-tema="den"] .mova-pilyuka,
+[data-tema="den"] .chytka-pidval .mova-pilyuka {
+  border-color: rgba(100, 116, 139, 0.45);
+  background: rgba(255, 255, 255, 0.85);
+  color: #3d4657;
+}
+
+[data-tema="den"] .mova-pilyuka-aktyvna,
+[data-tema="den"] .chytka-pidval .mova-pilyuka-aktyvna {
+  border-color: rgba(184, 134, 11, 0.7);
+  background: rgba(252, 211, 77, 0.28);
+  color: #8a5a00;
+}
+
+[data-tema="den"] .chytka-luchyk {
+  color: #566178;
+}
+
+[data-tema="den"] .chytka-posylannya {
+  color: #6d5aa8;
+  opacity: 0.9;
+}
+
+[data-tema="den"] .chytka-pidval {
+  opacity: 1;
+}
+
 /* --- Приклади тем: випадають із поля при натисканні (працює на телефоні) --- */
 .urok-nadyly {
   position: absolute;
@@ -4109,6 +4137,16 @@ body {
     top: 14px;
     right: 14px;
   }
+
+  /* Книжка не притискується до кнопки «Казка за 10 секунд» */
+  .kut-suvij-uroku {
+    margin: 4px auto 24px;
+  }
+
+  /* Низ сторінки (мови, лічильник, посилання) — чіткіший */
+  .chytka-pidval {
+    opacity: 0.92;
+  }
 }
 
 @media (max-width: 560px) {
@@ -4157,37 +4195,56 @@ body {
     padding: 10px 16px 4px;
   }
 
-  /* Місяць-кнопка: під заголовком, по центру — не перекриває шестірню */
+  /* Місяць-кнопка: під заголовком, по центру — велика і помітна */
   .misyats-obinka {
     position: static;
     order: 3;
-    width: 150px;
+    width: 174px;
     margin: 8px auto 12px;
   }
 
   .misyats {
-    width: 150px;
-    height: 150px;
-    padding: 16px;
+    width: 174px;
+    height: 174px;
+    padding: 18px;
   }
 
-  /* Підказки знизу — дихають і не налазять на сцену */
-  .landing-pidkas {
+  /* Сцена ліжечка з ведмедиком — одразу під місяцем (до текстів) */
+  .vedmedyk-scena {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
     order: 4;
-    opacity: 0.7;
+    width: 190px;
+    height: 126px;
+    margin: 6px auto 6px;
+  }
+
+  /* Дрібніші тексти — ПІД ведмедиком */
+  .landing-pidkas {
+    order: 5;
+    opacity: 0.6;
     margin-top: 4px;
+    font-size: 11px;
+    line-height: 1.45;
   }
 
   .landing-nizh {
-    order: 5;
-    padding-bottom: 205px;
-    font-size: 13px;
+    order: 6;
+    padding-bottom: 14px;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #958cbd;
   }
+}
 
-  /* Сцена ліжечка — нижче текстів, по центру */
-  .vedmedyk-scena {
-    left: 50%;
-    transform: translateX(-50%) scale(0.8);
-    bottom: 64px;
+/* Футер на телефоні — дрібний і спокійний */
+@media (max-width: 760px) {
+  .pidval {
+    font-size: 11px;
+    line-height: 1.5;
+    opacity: 0.78;
+    padding: 6px 16px 16px;
   }
 }
