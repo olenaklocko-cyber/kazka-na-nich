@@ -186,6 +186,21 @@ export default function App() {
     localStorage.setItem(LS_TEMA, tema);
   }, [tema]);
 
+  /**
+   * Мобільний режим: конструктор малюється як десктоп (1280px) і зменшується
+   * браузером під екран — композиція (кути + герої) лишається «десктопною»,
+   * мама може пінч-зумити, а поворот екрана дає більший масштаб.
+   * На вітальній сторінці — звичайний адаптивний viewport.
+   */
+  useEffect(() => {
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (!meta) return;
+    meta.content =
+      ekran === "konstruktor"
+        ? "width=1280, viewport-fit=cover"
+        : "width=device-width, initial-scale=1.0";
+  }, [ekran]);
+
   useEffect(() => {
     podie("storinka");
     const naHash = () => {
